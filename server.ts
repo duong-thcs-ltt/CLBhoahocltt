@@ -1,10 +1,11 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import type { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
-import { normalizeChemistryText } from "./src/utils/chemistryFormatter";
+import { normalizeChemistryText } from "./src/utils/chemistryFormatter.ts";
 
 dotenv.config();
 
