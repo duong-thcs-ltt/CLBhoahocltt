@@ -13,6 +13,8 @@ import {
   Compass,
   ArrowRight
 } from "lucide-react";
+import { normalizeChemistryText } from "../utils/chemistryFormatter";
+import { getClientPedagogicalFallback } from "../utils/offlineChemistryAnswers";
 
 export const KHKTMentor: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<KHKTIdea>(KHKT_SAMPLE_PROJECTS[0]);
@@ -27,23 +29,33 @@ export const KHKTMentor: React.FC = () => {
     setIsGenerating(true);
     setAiProposal(null);
 
+    let proposalText = "";
     try {
       const res = await fetch("/api/ai/khkt-mentor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           studentIdea: text,
+          prompt: text,
           category: "Hoá học xanh & Đời sống THCS Lý Tự Trọng",
         }),
       });
-      const data = await res.json();
-      setAiProposal(data.text);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.text) {
+          proposalText = normalizeChemistryText(data.text);
+        }
+      }
     } catch (e) {
-      console.error(e);
-      setAiProposal("Đã có lỗi kết nối. Em hãy thử lại nhé!");
-    } finally {
-      setIsGenerating(false);
+      console.warn("KHKT Mentor API unreachable, using pedagogical engine:", e);
     }
+
+    if (!proposalText) {
+      proposalText = getClientPedagogicalFallback(text, "khkt", "9");
+    }
+
+    setAiProposal(proposalText);
+    setIsGenerating(false);
   };
 
   const handleExportProposal = () => {

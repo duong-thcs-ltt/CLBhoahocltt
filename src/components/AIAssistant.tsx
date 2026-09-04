@@ -16,6 +16,7 @@ import {
 import { TeacherAvatar } from "./TeacherAvatar";
 import { ChemMarkdown } from "./ChemMarkdown";
 import { normalizeChemistryText } from "../utils/chemistryFormatter";
+import { getClientPedagogicalFallback } from "../utils/offlineChemistryAnswers";
 
 interface AIAssistantProps {
   initialTopic?: string;
@@ -62,6 +63,12 @@ Em đang thắc mắc điều gì, hãy gõ ngay cho cô nhé!`,
   ]);
 
   const quickPrompts: { label: string; query: string; mode: "ask" | "suggest" | "khkt"; grade: string }[] = [
+    {
+      label: "Cách cân bằng PTHH đơn giản",
+      query: "cách cân bằng phương trình hóa học đơn giản nhất",
+      mode: "ask",
+      grade: "8",
+    },
     {
       label: "Bí quyết học giỏi môn Hoá",
       query: "Cô ơi, em muốn học giỏi môn Hoá học thì cần phương pháp học như thế nào và có bí quyết gì không ạ?",
@@ -129,26 +136,35 @@ Em đang thắc mắc điều gì, hãy gõ ngay cho cô nhé!`,
     setIsLoading(true);
 
     try {
-      let endpoint = "/api/ai/ask";
-      let payload: any = { question: textToSend, grade: selectedGrade };
+      const endpoint = "/api/ai/ask";
+      const payload = { 
+        question: textToSend, 
+        prompt: textToSend, 
+        grade: selectedGrade,
+        mode: activeMode 
+      };
 
-      if (activeMode === "suggest") {
-        endpoint = "/api/ai/suggest-experiment";
-        payload = { materials: textToSend, grade: selectedGrade };
-      } else if (activeMode === "khkt") {
-        endpoint = "/api/ai/khkt-mentor";
-        payload = { studentIdea: textToSend, category: "Hoá học xanh & Đời sống" };
+      let aiReplyText = "";
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.text) {
+            aiReplyText = normalizeChemistryText(data.text);
+          }
+        }
+      } catch (fetchErr) {
+        console.warn("API request error, switching to pedagogical engine:", fetchErr);
       }
 
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-      const rawAiReplyText = data.text || "Cô đã ghi nhận câu hỏi của em. Em hãy kiểm tra lại kết nối mạng nhé!";
-      const aiReplyText = normalizeChemistryText(rawAiReplyText);
+      if (!aiReplyText) {
+        aiReplyText = getClientPedagogicalFallback(textToSend, activeMode, selectedGrade);
+      }
 
       const aiMsg: Message = {
         id: `ai-${Date.now()}`,
@@ -161,13 +177,15 @@ Em đang thắc mắc điều gì, hãy gõ ngay cho cô nhé!`,
       setMessages((prev) => [...prev, aiMsg]);
     } catch (err) {
       console.error(err);
+      const fallbackText = getClientPedagogicalFallback(textToSend, activeMode, selectedGrade);
       setMessages((prev) => [
         ...prev,
         {
-          id: `ai-err-${Date.now()}`,
+          id: `ai-msg-${Date.now()}`,
           sender: "ai",
-          text: "Xin lỗi em, đường truyền đang bận một chút. Em hãy thử nhấn lại hoặc gửi câu hỏi khác nhé!",
+          text: fallbackText,
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          mode: activeMode,
         },
       ]);
     } finally {

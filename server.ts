@@ -5,9 +5,78 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
-import { normalizeChemistryText } from "./src/utils/chemistryFormatter.ts";
-
 dotenv.config();
+
+// Inlined chemistry formatting utilities to ensure zero relative-import issues in Vercel Serverless
+const SUB_MAP: Record<string, string> = {
+  "0": "₀", "1": "₁", "2": "₂", "3": "₃", "4": "₄",
+  "5": "₅", "6": "₆", "7": "₇", "8": "₈", "9": "₉",
+  "+": "₊", "-": "₋", "=": "₌", "(": "₍", ")": "₎", "n": "ₙ", "m": "ₘ",
+};
+const SUP_MAP: Record<string, string> = {
+  "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴",
+  "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹",
+  "+": "⁺", "-": "⁻", "=": "⁼", "(": "⁽", ")": "⁾",
+};
+function toSubscript(str: string): string {
+  return str.split("").map((c) => SUB_MAP[c] || c).join("");
+}
+function toSuperscript(str: string): string {
+  return str.split("").map((c) => SUP_MAP[c] || c).join("");
+}
+const COMMON_CHEM_FORMULAS = [
+  { raw: /\bH2O\b/g, formatted: "H₂O" },
+  { raw: /\bCO2\b/g, formatted: "CO₂" },
+  { raw: /\bO2\b/g, formatted: "O₂" },
+  { raw: /\bN2\b/g, formatted: "N₂" },
+  { raw: /\bH2\b/g, formatted: "H₂" },
+  { raw: /\bCl2\b/g, formatted: "Cl₂" },
+  { raw: /\bSO2\b/g, formatted: "SO₂" },
+  { raw: /\bSO3\b/g, formatted: "SO₃" },
+  { raw: /\bNO2\b/g, formatted: "NO₂" },
+  { raw: /\bN2O\b/g, formatted: "N₂O" },
+  { raw: /\bNH3\b/g, formatted: "NH₃" },
+  { raw: /\bCH4\b/g, formatted: "CH₄" },
+  { raw: /\bC2H4\b/g, formatted: "C₂H₄" },
+  { raw: /\bC2H2\b/g, formatted: "C₂H₂" },
+  { raw: /\bC2H5OH\b/g, formatted: "C₂H₅OH" },
+  { raw: /\bCH3COOH\b/g, formatted: "CH₃COOH" },
+  { raw: /\bC6H12O6\b/g, formatted: "C₆H₁₂O₆" },
+  { raw: /\bH2SO4\b/g, formatted: "H₂SO₄" },
+  { raw: /\bHNO3\b/g, formatted: "HNO₃" },
+  { raw: /\bCaCO3\b/g, formatted: "CaCO₃" },
+  { raw: /\bCa\(OH\)2\b/g, formatted: "Ca(OH)₂" },
+  { raw: /\bBaSO4\b/g, formatted: "BaSO₄" },
+  { raw: /\bFe2O3\b/g, formatted: "Fe₂O₃" },
+  { raw: /\bFe3O4\b/g, formatted: "Fe₃O₄" },
+  { raw: /\bAl2O3\b/g, formatted: "Al₂O₃" },
+  { raw: /\bCuSO4\b/g, formatted: "CuSO₄" },
+  { raw: /\bNaCl\b/g, formatted: "NaCl" },
+];
+function normalizeChemistryText(content: string): string {
+  if (!content) return "";
+  let text = content;
+  text = text.replace(/\$([0-9.]+)\s*\^\\circ\s*\\text\{\s*([A-Za-z]+)\s*\}\$/g, "$1 °$2");
+  text = text.replace(/\$([0-9.]+)\s*\^\{\\circ\}\s*\\text\{\s*([A-Za-z]+)\s*\}\$/g, "$1 °$2");
+  text = text.replace(/\$([0-9.]+)\s*\^\\circ\s*([A-Za-z]+)\$/g, "$1 °$2");
+  text = text.replace(/([0-9.]+)\s*\^\\circ\s*([A-Za-z]+)\b/g, "$1 °$2");
+  text = text.replace(/\$([0-9.,]+)\s*\\text\{\s*([^}]+)\s*\}\$/g, "$1 $2");
+  text = text.replace(/\$([0-9.,]+)\s*(atm|kPa|bar|mmHg|mol\/L|mL|L|mol|g|kg)\$/gi, "$1 $2");
+  text = text.replace(/_\{([0-9+-\s]+)\}/g, (_, sub) => toSubscript(sub.trim()));
+  text = text.replace(/_([0-9])/g, (_, sub) => toSubscript(sub));
+  text = text.replace(/\^\{([0-9+-\s]+)\}/g, (_, sup) => toSuperscript(sup.trim()));
+  text = text.replace(/\^([0-9+\-])/g, (_, sup) => toSuperscript(sup));
+  text = text.replace(/\\rightarrow/g, "→");
+  text = text.replace(/\\to\b/g, "→");
+  text = text.replace(/\\rightleftharpoons/g, "⇌");
+  text = text.replace(/--\s*t°\s*-->/gi, " —(t°)→ ");
+  text = text.replace(/-->/g, " → ");
+  text = text.replace(/\$([0-9.,]+)\$/g, "$1");
+  COMMON_CHEM_FORMULAS.forEach(({ raw, formatted }) => {
+    text = text.replace(raw, formatted);
+  });
+  return text;
+}
 
 let currentDirname = process.cwd();
 try {
@@ -246,7 +315,54 @@ async function generateWithGemini(
 function getPedagogicalAnswer(question: string, grade?: string): string {
   const q = question.toLowerCase().trim();
 
-  if (q.includes("nước sôi") || q.includes("nhiệt độ sôi") || (q.includes("nước") && q.includes("sôi")) || (q.includes("sôi") && q.includes("độ"))) {
+  if (q.includes("cân bằng") && (q.includes("phương trình") || q.includes("pt") || q.includes("hoá học") || q.includes("hóa học"))) {
+    return normalizeChemistryText(`Chào em! Cân bằng phương trình hoá học là kỹ năng nền tảng quan trọng bậc nhất của môn KHTN / Hoá học THCS (bộ sách Kết nối tri thức). Cô hướng dẫn em **phương pháp cân bằng đơn giản, nhanh và chuẩn xác nhất (Quy tắc ưu tiên & Phương pháp Chẵn - Lẻ)** nhé:
+
+### 1. Nguyên tắc cốt lõi không được quên
+- **Định luật bảo toàn khối lượng:** Tổng số nguyên tử của từng nguyên tố ở vế trái (chất phản ứng) **luôn luôn bằng** vế phải (chất sản phẩm).
+- **Quy tắc bất di bất dịch:** Ta chỉ được thêm **hệ số** đặt phía trước công thức hoá học (ví dụ: **2**H₂O, **3**O₂). **Tuyệt đối không được thay đổi chỉ số chân** (chẳng hạn không được đổi Al₂O₃ thành Al₂O₄ hay H₂O thành H₂O₂)!
+
+### 2. Thứ tự ưu tiên cân bằng nhanh (Mẹo vàng của Cô Dương)
+Khi nhìn vào một phương trình, em hãy cân bằng lần lượt theo thứ tự:
+1. **Kim loại** trước tiên (Al, Fe, Cu, Na, Ca, Mg, Zn...).
+2. **Phi kim** tiếp theo (C, S, P, Cl, N...).
+3. **Hydrogen (H)** kế tiếp.
+4. **Oxygen (O)** kiểm tra cuối cùng (nếu các nguyên tố trên đã đúng thì Oxygen sẽ tự động khớp!).
+*(Mẹo nhỏ: Nếu trong phương trình có nhóm nguyên tử như SO₄, NO₃, OH, PO₄ không bị vỡ sau phản ứng, em hãy xem cả nhóm đó như một đơn vị để cân bằng).*
+
+### 3. Phương pháp Chẵn - Lẻ (Bí quyết giải nhanh)
+Nếu một nguyên tố ở một vế có số nguyên tử là **số lẻ**, còn vế kia là **số chẵn**, em hãy nhân hệ số **2** vào chất chứa số lẻ đó để biến nó thành số chẵn, sau đó cân bằng các nguyên tố còn lại.
+
+### 4. Ba ví dụ mẫu từng bước cực dễ hiểu
+
+**Ví dụ 1: Nhôm tác dụng với Oxi**
+- Sơ đồ: \`Al + O₂ ──(t°)──> Al₂O₃\`
+- Phân tích: Bên phải có 3 nguyên tử O (lẻ), bên trái có 2 nguyên tử O (chẵn).
+- Bước 1 (Làm chẵn O): Đặt hệ số **2** trước Al₂O₃ ──> \`Al + O₂ ──> 2Al₂O₃\` (lúc này bên phải có 2 × 3 = 6 nguyên tử O).
+- Bước 2 (Khớp O bên trái): Đặt hệ số **3** trước O₂ (3 × 2 = 6 nguyên tử O).
+- Bước 3 (Khớp Al): Bên phải có 2 × 2 = 4 nguyên tử Al ──> Đặt hệ số **4** trước Al ở vế trái.
+- Phương trình hoàn chỉnh:
+  **4Al + 3O₂ ──(t°)──> 2Al₂O₃**
+
+**Ví dụ 2: Sắt tác dụng với Axit clohiđric**
+- Sơ đồ: \`Fe + HCl ──> FeCl₂ + H₂↑\`
+- Quan sát: Vế phải có 2 Cl và 2 H.
+- Bước 1: Chỉ cần đặt hệ số **2** trước HCl ở vế trái là cả Cl và H đều khớp!
+- Phương trình hoàn chỉnh:
+  **Fe + 2HCl ──> FeCl₂ + H₂↑**
+
+**Ví dụ 3: Đốt cháy khí gas gia đình (Metan)**
+- Sơ đồ: \`CH₄ + O₂ ──(t°)──> CO₂ + H₂O\`
+- Cân bằng C: 1 C = 1 C (đã bằng).
+- Cân bằng H: Vế trái có 4 H, vế phải có 2 H ──> Đặt hệ số **2** trước H₂O (thành 4 H).
+- Cân bằng O: Vế phải có 2 (trong CO₂) + 2 (trong 2H₂O) = 4 O ──> Đặt hệ số **2** trước O₂ ở vế trái.
+- Phương trình hoàn chỉnh:
+  **CH₄ + 2O₂ ──(t°)──> CO₂ + 2H₂O**
+
+Em hãy thử áp dụng ngay với phản ứng: \`Fe + O₂ ──(t°)──> Fe₃O₄\` và cho cô biết hệ số của Fe và O₂ là bao nhiêu nhé!`);
+  }
+
+  if (q.includes("học giỏi") || q.includes("bí quyết") || q.includes("phương pháp học") || q.includes("học tốt")) {
     return normalizeChemistryText(`Chào em! Câu hỏi về nhiệt độ sôi của nước là một chủ đề rất quen thuộc nhưng chứa đựng vô số điều thú vị theo chương trình Khoa học tự nhiên (KNTT):
 
 ### 1. Hiện tượng & Câu trả lời cốt lõi
@@ -407,8 +523,11 @@ Em hãy thử liên hệ kiến thức này với một vật dụng hoặc hi�
 // 1. AI Q&A / Explanation: "Vì sao? Như thế nào?"
 apiRouter.post("/ai/ask", async (req: Request, res: Response) => {
   try {
-    const { question, grade, topic } = req.body;
-    if (!question || typeof question !== "string" || !question.trim()) {
+    const question = (req.body.question || req.body.prompt || "").toString().trim();
+    const grade = req.body.grade;
+    const topic = req.body.topic;
+    const mode = req.body.mode;
+    if (!question) {
       return res.status(400).json({ error: "Vui lòng nhập câu hỏi cần giải đáp." });
     }
 
@@ -418,19 +537,29 @@ apiRouter.post("/ai/ask", async (req: Request, res: Response) => {
         const prompt = `Học sinh ${grade ? `lớp ${grade}` : "THCS"} trường THCS Lý Tự Trọng (Tây Ninh) hỏi Cô Huỳnh Thị Thuỳ Dương:
 "${question}"
 ${topic ? `Thuộc chủ đề/tháng: ${topic}` : ""}
+${mode ? `Chế độ lựa chọn: ${mode}` : ""}
 
-HÃY PHÂN TÍCH Ý ĐỊNH VÀ TRẢ LỜI ĐÚNG TRỌNG TÂM CÂU HỎI CỦA HỌC SINH:
+QUY TẮC CỐT LÕI BẮT BUỘC: TRẢ LỜI ĐÚNG 100% TRỌNG TÂM CÂU HỎI HOẶC YÊU CẦU CỦA HỌC SINH! HỌC SINH HỎI GÌ THÌ TRẢ LỜI ĐÚNG CÁI ĐÓ!
+- NẾU HỌC SINH HỎI VỀ CÁCH CÂN BẰNG PHƯƠNG TRÌNH HOÁ HỌC:
+  + Trả lời trực diện, chi tiết, dễ hiểu nhất theo chương trình KHTN (Kết nối tri thức):
+    1. Định luật bảo toàn khối lượng và quy tắc không được đổi chỉ số chân.
+    2. Thứ tự ưu tiên cân bằng: Kim loại -> Phi kim -> Hydrogen -> Oxygen.
+    3. Phương pháp Chẵn - Lẻ kinh điển.
+    4. Cung cấp 2-3 ví dụ mẫu từng bước (Al + O₂ → Al₂O₃, Fe + HCl → FeCl₂ + H₂, CH₄ + O₂ → CO₂ + H₂O).
+  + TUYỆT ĐỐI KHÔNG tự tiện gợi ý thí nghiệm không liên quan (như đèn lava hay slime) khi học sinh đang hỏi cách cân bằng phương trình.
 - NẾU HỌC SINH HỎI VỀ PHƯƠNG PHÁP HỌC / TÂM SỰ / MUỐN HỌC GIỎI HOÁ:
   + Đóng vai Cô Thuỳ Dương đưa ra lời khuyên chân thành, khích lệ tinh thần, chỉ ra các bước cụ thể: nắm chắc hoá trị, học qua thí nghiệm thực tế, cách cân bằng phương trình, vẽ sơ đồ tư duy mindmap, luyện tập mỗi ngày.
-  + Trả lời tự nhiên, ấm áp, truyền cảm hứng, KHÔNG gượng ép chia theo tiêu đề hiện tượng/bản chất vật lý.
-- NẾU HỌC SINH HỎI VỀ HIỆN TƯỢNG KHOA HỌC / THÍ NGHIỆM / ĐỜI SỐNG:
+  + Trả lời tự nhiên, ấm áp, truyền cảm hứng.
+- NẾU HỌC SINH HỎI VỀ HIỆN TƯỢNG KHOA HỌC / ĐỜI SỐNG (Nước sôi, hành cay mắt, đinh gỉ...):
   + Giải đáp cuốn hút theo bộ sách Kết nối tri thức:
     ### 1. Hiện tượng & Câu trả lời cốt lõi (ngắn gọn, trực diện, chính xác)
     ### 2. Bản chất hoá học đằng sau (phương trình chữ hoặc KHHH chuẩn Unicode)
     ### 3. Ứng dụng thực tế đời sống thú vị
     ### 4. Thử thách nhỏ / Câu hỏi tò mò dành cho học sinh suy ngẫm
-- NẾU HỌC SINH HỎI VỀ BÀI TẬP / CHẤT HOÁ HỌC:
+- NẾU HỌC SINH HỎI VỀ BÀI TẬP / LÝ THUYẾT / CÔNG THỨC / ĐỊNH NGHĨA:
   + Hướng dẫn tư duy từng bước để học sinh hiểu sâu bản chất.
+- CHỈ KHI HỌC SINH THỰC SỰ YÊU CẦU GỢI Ý THÍ NGHIỆM HOẶC CUNG CẤP DANH SÁCH NGUYÊN LIỆU THÍ NGHIỆM:
+  + Lúc đó mới trình bày quy trình thí nghiệm STEM an toàn.
 
 LƯU Ý QUAN TRỌNG: Tuyệt đối không dùng mã LaTeX thô như $...$. Luôn viết thẳng 100 °C, 1 atm, H₂O, CO₂, Fe²⁺, SO₄²⁻.`;
 
@@ -457,15 +586,37 @@ LƯU Ý QUAN TRỌNG: Tuyệt đối không dùng mã LaTeX thô như $...$. Lu�
 // 2. AI Experiment Suggestion / Custom STEM Protocol
 apiRouter.post("/ai/suggest-experiment", async (req: Request, res: Response) => {
   try {
-    const { materials, grade, interest } = req.body;
+    const rawInput = (req.body.materials || req.body.prompt || req.body.question || "").toString().trim();
+    const grade = req.body.grade;
+    const interest = req.body.interest;
     const ai = getAIClient();
+
+    // If student actually asks a conceptual question rather than experiment materials, answer the question directly
+    const lowerInput = rawInput.toLowerCase();
+    const isConceptualQuestion = lowerInput.includes("cân bằng") || lowerInput.includes("tại sao") || 
+      lowerInput.includes("vì sao") || lowerInput.includes("như thế nào") || lowerInput.includes("là gì") || 
+      lowerInput.includes("phương pháp") || lowerInput.includes("làm thế nào") || lowerInput.includes("tính ");
+
+    if (isConceptualQuestion && ai) {
+      const prompt = `Học sinh hỏi Cô Huỳnh Thị Thuỳ Dương: "${rawInput}". Hãy trả lời ĐÚNG TRỌNG TÂM câu hỏi này của học sinh một cách rõ ràng, sư phạm, chuẩn mực KNTT THCS. Tuyệt đối không tự ý gợi ý thí nghiệm không liên quan. Không dùng LaTeX $...$. Viết thẳng H₂O, CO₂, 100 °C.`;
+      try {
+        const text = await generateWithGemini(ai, prompt, TEACHER_SYSTEM_PROMPT, 0.7);
+        if (text && text.trim()) {
+          return res.json({ text: normalizeChemistryText(text) });
+        }
+      } catch (err) {
+        console.warn("Gemini fallback in suggest experiment question mode:", err);
+      }
+      return res.json({ text: getPedagogicalAnswer(rawInput, grade) });
+    }
 
     if (ai) {
       try {
         const prompt = `Gợi ý 1 thí nghiệm hoá học STEM vui, an toàn tuyệt đối và sáng tạo cho học sinh CLB Hoá học THCS (Khối ${grade || "7-9"}).
-Nguyên liệu sẵn có học sinh đề xuất: ${materials || "Nguyên liệu gian bếp dễ tìm (chanh, giấm, muối, baking soda, bắp cải tím...)"}
+Nguyên liệu / Yêu cầu học sinh đề xuất: ${rawInput || "Nguyên liệu gian bếp dễ tìm (chanh, giấm, muối, baking soda, bắp cải tím...)"}
 Sở thích/Mục tiêu: ${interest || "Khám phá hiện tượng biến đổi chất diệu kỳ"}
 
+LƯU Ý: Phải đọc kỹ yêu cầu của học sinh để gợi ý đúng thí nghiệm phù hợp, không bị lạc đề.
 Hãy trình bày cụ thể theo cấu trúc chuẩn CLB:
 - **Tên thí nghiệm**: (Tên hấp dẫn, kích thích tò mò)
 - **Mục tiêu học tập**: (Liên hệ bài học SGK Kết nối tri thức lớp 7/8/9)
@@ -515,8 +666,28 @@ LƯU Ý: Không dùng LaTeX $...$. Viết thẳng 100 °C, 1 atm, H₂O, CO₂.`
 // 3. AI KHKT Mentor & Olympic Incubator
 apiRouter.post("/ai/khkt-mentor", async (req: Request, res: Response) => {
   try {
-    const { studentIdea, category } = req.body;
+    const studentIdea = (req.body.studentIdea || req.body.prompt || req.body.question || req.body.idea || "").toString().trim();
+    const category = req.body.category;
     const ai = getAIClient();
+
+    // If input is actually a direct conceptual/theoretical question rather than a KHKT project idea
+    const lowerIdea = studentIdea.toLowerCase();
+    const isConceptualQuestion = lowerIdea.includes("cân bằng") || lowerIdea.includes("tại sao") || 
+      lowerIdea.includes("vì sao") || lowerIdea.includes("như thế nào") || lowerIdea.includes("là gì") || 
+      lowerIdea.includes("phương pháp") || lowerIdea.includes("làm thế nào") || lowerIdea.includes("tính ");
+
+    if (isConceptualQuestion && ai) {
+      const prompt = `Học sinh hỏi Cô Huỳnh Thị Thuỳ Dương: "${studentIdea}". Hãy trả lời ĐÚNG TRỌNG TÂM câu hỏi này của học sinh một cách rõ ràng, sư phạm, chuẩn mực KNTT THCS. Không dùng LaTeX $...$. Viết thẳng H₂O, CO₂, 100 °C.`;
+      try {
+        const text = await generateWithGemini(ai, prompt, TEACHER_SYSTEM_PROMPT, 0.7);
+        if (text && text.trim()) {
+          return res.json({ text: normalizeChemistryText(text) });
+        }
+      } catch (err) {
+        console.warn("Gemini fallback in khkt mentor question mode:", err);
+      }
+      return res.json({ text: getPedagogicalAnswer(studentIdea) });
+    }
 
     if (ai) {
       try {
@@ -561,9 +732,31 @@ LƯU Ý: Không dùng LaTeX $...$. Viết thẳng 100 °C, 1 atm, H₂O, CO₂.`
   }
 });
 
-// Mount API router for both /api prefix and root (ensuring full compatibility with Vercel serverless rewrites)
+apiRouter.get("/health", (_req: Request, res: Response) => {
+  res.json({
+    status: "ok",
+    appName: "CLB Hoá học THCS Lý Tự Trọng - KNTT",
+    academicYear: "2026-2027",
+    hasApiKey: Boolean(process.env.GEMINI_API_KEY),
+  });
+});
+
+apiRouter.get("/", (_req: Request, res: Response) => {
+  res.json({
+    status: "ok",
+    appName: "CLB Hoá học THCS Lý Tự Trọng - KNTT",
+    academicYear: "2026-2027",
+    hasApiKey: Boolean(process.env.GEMINI_API_KEY),
+  });
+});
+
+// Mount API router ONLY under /api prefix so that root "/" routes directly to Vite frontend preview
 app.use("/api", apiRouter);
-app.use(apiRouter);
+
+// Fallback for unmatched API routes to prevent stream unpipe / finalhandler crashes in serverless runtimes
+app.use("/api", (_req: Request, res: Response) => {
+  res.status(404).json({ error: "API endpoint not found" });
+});
 
 // Vite middleware setup for standalone local / container execution
 async function startServer() {
