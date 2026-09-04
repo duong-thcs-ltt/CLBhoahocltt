@@ -1,0 +1,6 @@
+{
+  "name": "CLB Hoá học THCS Lý Tự Trọng - KNTT",
+  "description": "Cổng thông tin & Học tập tương tác Câu lạc bộ Hoá học THCS Lý Tự Trọng (Phường Long Hoa, Tây Ninh) do Cô Huỳnh Thị Thuỳ Dương sáng lập & phụ trách. Lộ trình 9 tháng KNTT khối 7-9, phòng Lab ảo, Trợ lý AI và ươm mầm KHKT.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

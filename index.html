@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <script>
+      (function() {
+        try {
+          var originalFetch = window.fetch;
+          var _fetch = originalFetch ? originalFetch.bind(window) : null;
+          
+          var descriptor = Object.getOwnPropertyDescriptor(window, 'fetch');
+          if (!descriptor || descriptor.configurable) {
+            Object.defineProperty(window, 'fetch', {
+              get: function() {
+                return _fetch || originalFetch;
+              },
+              set: function(val) {
+                _fetch = val;
+              },
+              configurable: true,
+              enumerable: true
+            });
+          }
+
+          var protoDesc = Object.getOwnPropertyDescriptor(Window.prototype, 'fetch');
+          if (protoDesc && protoDesc.configurable) {
+            var protoFetch = protoDesc.value || (protoDesc.get ? protoDesc.get.call(window) : null);
+            Object.defineProperty(Window.prototype, 'fetch', {
+              get: function() {
+                return _fetch || protoFetch;
+              },
+              set: function(val) {
+                _fetch = val;
+              },
+              configurable: true,
+              enumerable: true
+            });
+          }
+        } catch (e) {}
+
+        window.addEventListener('error', function(event) {
+          if (event && event.message && event.message.indexOf('Cannot set property fetch') !== -1) {
+            if (typeof event.stopImmediatePropagation === 'function') {
+              event.stopImmediatePropagation();
+            }
+            if (typeof event.preventDefault === 'function') {
+              event.preventDefault();
+            }
+            return true;
+          }
+        }, true);
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CLB Hoá học THCS Lý Tự Trọng | Cô Huỳnh Thị Thuỳ Dương - Tây Ninh</title>
+    <meta name="description" content="Cổng thông tin & Học tập tương tác Câu lạc bộ Hoá học THCS Lý Tự Trọng (Phường Long Hoa, Tây Ninh) do Cô Huỳnh Thị Thuỳ Dương sáng lập & phụ trách. Lộ trình 9 tháng KNTT khối 7-9, phòng Lab ảo, Trợ lý AI và ươm mầm KHKT." />
+    <meta property="og:title" content="CLB Hoá học THCS Lý Tự Trọng | Cô Huỳnh Thị Thuỳ Dương - Tây Ninh" />
+    <meta property="og:description" content="Cổng thông tin & Học tập tương tác Câu lạc bộ Hoá học THCS Lý Tự Trọng (Phường Long Hoa, Tây Ninh) do Cô Huỳnh Thị Thuỳ Dương sáng lập & phụ trách. Lộ trình 9 tháng KNTT khối 7-9, phòng Lab ảo, Trợ lý AI và ươm mầm KHKT." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-slate-50 text-slate-900 antialiased font-sans" style="font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
