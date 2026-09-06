@@ -1,6 +1,82 @@
 import { GoogleGenAI } from "@google/genai";
-import { getClientPedagogicalFallback } from "../../src/utils/offlineChemistryAnswers";
-import { normalizeChemistryText } from "../../src/utils/chemistryFormatter";
+
+function normalizeChemistryText(content: string): string {
+  if (!content) return "";
+  let text = content;
+  text = text.replace(/\$([0-9.]+)\s*\^\\circ\s*\\text\{\s*([A-Za-z]+)\s*\}\$/g, "$1 °$2");
+  text = text.replace(/\$([0-9.]+)\s*\^\{\\circ\}\s*\\text\{\s*([A-Za-z]+)\s*\}\$/g, "$1 °$2");
+  text = text.replace(/([0-9.]+)\s*\^\\circ\s*([A-Za-z]+)\b/g, "$1 °$2");
+  text = text.replace(/\$([0-9.,]+)\s*\\text\{\s*([^}]+)\s*\}\$/g, "$1 $2");
+  text = text.replace(/\$\\text\{([^}]+)\}\$/g, "$1");
+  text = text.replace(/\\rightarrow/g, "→");
+  text = text.replace(/\\uparrow/g, "↑");
+  text = text.replace(/\\downarrow/g, "↓");
+  text = text.replace(/--\s*t°\s*-->/gi, " —(t°)→ ");
+  text = text.replace(/-->/g, " → ");
+  text = text.replace(/\$([0-9.,]+)\$/g, "$1");
+  text = text.replace(/\$([A-Za-z0-9₀-₉⁰-⁹⁺⁻()→⇌]+)\$/g, "$1");
+  return text;
+}
+
+function getPedagogicalAnswer(question: string, grade = "8"): string {
+  const q = (question || "").toLowerCase();
+
+  if (
+    q.includes("dẫn điện") ||
+    q.includes("dan dien") ||
+    (q.includes("kim loại") && q.includes("nước")) ||
+    (q.includes("kim loai") && q.includes("nuoc"))
+  ) {
+    return `Chào em! Cô Huỳnh Thị Thuỳ Dương rất khen ngợi câu hỏi mang tính tư duy khoa học của em:
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+**Kim loại dẫn điện tốt hơn nước rất nhiều.**
+Trong thực tế, **nước tinh khiết (nước cất)** gần như không dẫn điện. Chỉ khi nước có hoà tan muối khoáng hoặc axit/bazơ thì mới dẫn điện, nhưng khả năng dẫn điện vẫn kém xa kim loại hàng triệu lần!
+
+### 2. Bản chất khoa học đằng sau
+- **Trong kim loại (đồng Cu, nhôm Al, sắt Fe...):** Có một "biển electron tự do" di chuyển cực kỳ nhanh chóng và dễ dàng khắp mạng tinh thể kim loại khi có hiệu điện thế, tạo ra dòng điện rất mạnh.
+- **Trong nước nguyên chất (H₂O):** Là các phân tử trung hoà điện, hầu như không có các hạt mang điện tự do.
+- **Trong nước sinh hoạt (nước máy, nước sông, nước muối):** Có chứa các ion mang điện (Na⁺, Cl⁻, Ca²⁺...), các ion này di chuyển chậm hơn electron tự do trong kim loại rất nhiều.
+
+### 3. Ứng dụng thực tế đời sống
+- Lõi dây điện trong gia đình và trường Lý Tự Trọng luôn làm bằng đồng hoặc nhôm để dẫn điện tối ưu.
+- Nước sinh hoạt và mồ hôi dẫn điện nên tuyệt đối KHÔNG chạm tay ướt vào ổ cắm điện để phòng tránh điện giật!
+
+### 4. Thử thách nhỏ
+Cô đố em: Giữa nước cất và nước muối ăn, nước nào sẽ làm sáng bóng đèn của mạch điện thử nghiệm?`;
+  }
+
+  if (
+    (q.includes("sắt") || q.includes("fe")) &&
+    (q.includes("hcl") || q.includes("fecl2") || q.includes("fecl3"))
+  ) {
+    return `Chào em! Cô Dương giải thích phản ứng của sắt (Fe) theo chuẩn SGK KNTT:
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+Sắt (Fe) phản ứng với axit clohiđric (HCl) **chỉ tạo ra muối Sắt(II) clorua FeCl₂**, không tạo ra FeCl₃:
+**Fe + 2HCl → FeCl₂ + H₂↑**
+
+### 2. Bản chất khoa học
+Axit HCl có tính oxi hoá trung bình (qua ion H⁺), chỉ oxi hoá Fe lên mức +2 (Fe²⁺). Muốn đưa Fe lên +3 (FeCl₃), cần chất oxi hoá cực mạnh như khí Clo: \`2Fe + 3Cl₂ —(t°)→ 2FeCl₃\`.`;
+  }
+
+  if (q.includes("thể tích mol") || q.includes("24,79") || q.includes("đkc")) {
+    return `Chào em! Theo SGK KNTT (GDPT 2018):
+- Ở điều kiện chuẩn (đkc: 25 °C, 1 bar), **1 mol chất khí bất kì đều chiếm thể tích là 24,79 L**.
+- Công thức: \`V = n × 24,79\`.
+- Lưu ý: Không dùng số cũ 22,4 L của chương trình trước đây nữa nhé!`;
+  }
+
+  return `Chào em! Cô Huỳnh Thị Thuỳ Dương giải đáp câu hỏi của em:
+
+### 1. Hiện tượng & Bản chất khoa học
+Đối với câu hỏi "${question}":
+Trong môn Khoa học tự nhiên (phân môn Hoá học - SGK Kết nối tri thức Lớp ${grade}), các chất và phản ứng luôn tuân theo cấu tạo nguyên tử, liên kết hoá học và định luật bảo toàn khối lượng.
+
+### 2. Lời khuyên học tập từ Cô Dương
+- Em hãy liên hệ hiện tượng này với bài học trong SGK KHTN ${grade} hoặc thực tế đời sống tại Tây Ninh.
+- Thử suy ngẫm về các dấu hiệu nhận biết: có xuất hiện bọt khí (↑), kết tủa (↓) hay biến đổi nhiệt độ không nhé!`;
+}
 
 const TEACHER_SYSTEM_PROMPT = `Cô là Huỳnh Thị Thuỳ Dương, giáo viên chủ nhiệm CLB Hoá học trường THCS Lý Tự Trọng (phường Long Hoa, tỉnh Tây Ninh). Bộ sách giảng dạy: Kết nối tri thức với cuộc sống (KNTT) môn Khoa học tự nhiên (Toàn diện phân môn Hoá học, Vật lý, Sinh học và STEM đời sống khối 6, 7, 8, 9).
 
@@ -72,7 +148,7 @@ Cấu trúc chuẩn sư phạm của Cô Dương:
 
 LƯU Ý QUAN TRỌNG: Tuyệt đối không dùng mã LaTeX thô như $...$. Luôn viết thẳng 100 °C, 1 atm, H₂O, CO₂, Fe²⁺, SO₄²⁻.`;
 
-        const candidateModels = ["gemini-flash-latest", "gemini-3.1-flash-lite", "gemini-3.8-flash"];
+        const candidateModels = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.1-flash-lite"];
         let generatedText = "";
         for (const model of candidateModels) {
           try {
@@ -102,11 +178,11 @@ LƯU Ý QUAN TRỌNG: Tuyệt đối không dùng mã LaTeX thô như $...$. Lu�
     }
 
     // High quality pedagogical fallback
-    const answer = getClientPedagogicalFallback(question, body.mode || "ask", grade);
-    return res.status(200).json({ text: answer });
+    const answer = getPedagogicalAnswer(question, grade);
+    return res.status(200).json({ text: normalizeChemistryText(answer) });
   } catch (error: any) {
     console.error("Vercel ask handler error:", error);
-    const fallbackAnswer = getClientPedagogicalFallback(req.body?.question || "", "ask", "8");
-    return res.status(200).json({ text: fallbackAnswer });
+    const fallbackAnswer = getPedagogicalAnswer(req.body?.question || "", "8");
+    return res.status(200).json({ text: normalizeChemistryText(fallbackAnswer) });
   }
 }

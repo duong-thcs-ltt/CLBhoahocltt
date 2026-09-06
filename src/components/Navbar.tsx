@@ -9,7 +9,6 @@ import {
   HelpCircle, 
   Lightbulb, 
   Trophy,
-  GraduationCap,
   Flame,
   BookOpen
 } from "lucide-react";
@@ -41,7 +40,6 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
     { id: "roadmap", label: "Lộ Trình 9 Tháng", icon: CalendarDays, badge: "9 Tháng" },
     { id: "virtual_lab", label: "Phòng Thực Hành Ảo", icon: FlaskConical, badge: "5 Mô Phỏng" },
     { id: "ai_assistant", label: "Trợ Lý AI Cô Dương", icon: Sparkles, badge: "Gemini" },
-    { id: "teacher", label: "Cô Thuỳ Dương", icon: GraduationCap, badge: "Chủ Nhiệm" },
     { id: "journal", label: "Nhật Ký Nhà Khoa Học", icon: BookOpenCheck },
     { id: "quiz", label: "Đố Vui Khám Phá", icon: HelpCircle, badge: "Đấu Trường" },
     { id: "khkt", label: "Ươm Mầm KHKT & Olympic", icon: Lightbulb, badge: "Tây Ninh" },
@@ -106,46 +104,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               </p>
             </div>
           </div>
-
-          {/* Quick Actions */}
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => setActiveTab("guide")}
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300 hover:bg-emerald-100 transition-colors shadow-2xs cursor-pointer"
-              title="Cẩm nang hướng dẫn sử dụng và vận hành CLB chi tiết từng bước cho Quản trị viên"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-emerald-700" />
-              <span className="hidden sm:inline">Cẩm Nang Vận Hành</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("teacher")}
-              className="inline-flex items-center gap-1.5 text-xs font-bold pl-1.5 pr-3 py-1 rounded-xl bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 transition-colors shadow-2xs cursor-pointer"
-            >
-              <TeacherAvatar size="sm" allowEdit={false} bordered={true} className="w-5 h-5" />
-              <span className="hidden sm:inline">Góc Cô Dương</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("virtual_lab")}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition-colors"
-            >
-              <FlaskConical className="w-3.5 h-3.5 text-emerald-600" />
-              <span className="hidden md:inline">Phòng Lab</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("ai_assistant")}
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-linear-to-r from-teal-600 to-emerald-600 text-white shadow-xs hover:opacity-95 transition-opacity"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-200" />
-              <span>Hỏi AI</span>
-            </button>
-          </div>
         </div>
 
-        {/* Navigation Tabs (Responsive Scrollable) */}
-        <nav className="flex items-center gap-1.5 overflow-x-auto pt-2 pb-1 scrollbar-none border-t border-slate-100 mt-2">
+        {/* Navigation Tabs (Fully visible, responsive wrap) */}
+        <nav className="flex flex-wrap items-center gap-1 sm:gap-1.5 pt-2 pb-1 border-t border-slate-100 mt-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -154,10 +116,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 key={item.id}
                 id={`nav-tab-${item.id}`}
                 onClick={() => setActiveTab(item.id)}
-                className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   isActive
                     ? "bg-emerald-700 text-white shadow-xs"
-                    : "text-slate-650 hover:text-emerald-900 hover:bg-emerald-50/70"
+                    : "text-slate-700 hover:text-emerald-900 hover:bg-emerald-50/80"
                 }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? "text-amber-300" : "text-slate-500"}`} />
@@ -167,7 +129,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                     className={`text-[10px] px-1.5 py-0.2 rounded-full font-medium ${
                       isActive
                         ? "bg-white/20 text-white"
-                        : "bg-slate-150 text-slate-600"
+                        : "bg-slate-100 text-slate-600"
                     }`}
                   >
                     {item.badge}

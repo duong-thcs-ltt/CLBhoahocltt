@@ -1,6 +1,38 @@
 import { GoogleGenAI } from "@google/genai";
-import { getClientPedagogicalFallback } from "../../src/utils/offlineChemistryAnswers";
-import { normalizeChemistryText } from "../../src/utils/chemistryFormatter";
+
+function normalizeChemistryText(content: string): string {
+  if (!content) return "";
+  let text = content;
+  text = text.replace(/\$([0-9.]+)\s*\^\\circ\s*\\text\{\s*([A-Za-z]+)\s*\}\$/g, "$1 °$2");
+  text = text.replace(/\$([0-9.]+)\s*\^\{\\circ\}\s*\\text\{\s*([A-Za-z]+)\s*\}\$/g, "$1 °$2");
+  text = text.replace(/([0-9.]+)\s*\^\\circ\s*([A-Za-z]+)\b/g, "$1 °$2");
+  text = text.replace(/\$([0-9.,]+)\s*\\text\{\s*([^}]+)\s*\}\$/g, "$1 $2");
+  text = text.replace(/\$\\text\{([^}]+)\}\$/g, "$1");
+  text = text.replace(/\\rightarrow/g, "→");
+  text = text.replace(/--\s*t°\s*-->/gi, " —(t°)→ ");
+  text = text.replace(/\$([0-9.,]+)\$/g, "$1");
+  return text;
+}
+
+function getExperimentFallback(rawInput: string, grade = "8"): string {
+  return `### Gợi ý Thí nghiệm STEM Hoá học Vui & An toàn (KNTT Lớp ${grade})
+
+1. **Tên thí nghiệm:** "Núi lửa phun trào mini - Khám phá phản ứng Axit tác dụng với Muối cacbonat"
+2. **Nguyên liệu dễ tìm trong gian bếp:**
+   - 2 thìa baking soda (muối NaHCO₃).
+   - 50 mL giấm ăn (axit axetic CH₃COOH) hoặc nước cốt 1 quả chanh (axit citric).
+   - 1 giọt nước rửa chén và vài giọt phẩm màu đỏ (hoặc siro dâu).
+   - 1 chiếc đĩa sâu lòng hoặc cốc thuỷ tinh nhỏ.
+3. **Các bước tiến hành:**
+   - Bước 1: Đặt cốc thuỷ tinh lên giữa đĩa. Cho 2 thìa baking soda vào đáy cốc.
+   - Bước 2: Nhỏ vào cốc 1 giọt nước rửa chén và 2 giọt màu đỏ để tạo bọt dung nham đẹp mắt.
+   - Bước 3: Rót từ từ 50 mL giấm ăn vào cốc.
+4. **Hiện tượng quan sát:** Dung dịch lập tức sôi trào, bọt khí màu đỏ cuồn cuộn dâng cao trào qua miệng cốc như dòng nham thạch thu nhỏ!
+5. **Bản chất khoa học:** Axit axetic trong giấm phản ứng mãnh liệt với baking soda giải phóng lượng lớn khí Carbon dioxide:
+   \`CH₃COOH + NaHCO₃ → CH₃COONa + H₂O + CO₂↑\`
+   Khí CO₂ sinh ra bị bẫy trong màng xà phòng tạo thành bọt xốp khổng lồ!
+6. **Lưu ý an toàn:** Thí nghiệm hoàn toàn lành tính, em có thể tự tin làm tại nhà hoặc trình diễn trong buổi sinh hoạt CLB!`;
+}
 
 const TEACHER_SYSTEM_PROMPT = `Cô là Huỳnh Thị Thuỳ Dương, giáo viên chủ nhiệm CLB Hoá học trường THCS Lý Tự Trọng (Tây Ninh). Bộ sách: Kết nối tri thức với cuộc sống (KNTT) môn Khoa học tự nhiên (phân môn Hoá học khối 7, 8, 9).
 Phong cách: Thân thiện, sư phạm, chuẩn mực, truyền cảm hứng yêu thích khoa học.
@@ -48,7 +80,7 @@ Hãy trình bày cụ thể:
 
 LƯU Ý: Không dùng LaTeX $...$. Viết thẳng 100 °C, 1 atm, H₂O, CO₂.`;
 
-        const candidateModels = ["gemini-flash-latest", "gemini-3.1-flash-lite", "gemini-3.8-flash"];
+        const candidateModels = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.1-flash-lite"];
         let generatedText = "";
         for (const model of candidateModels) {
           try {
@@ -76,11 +108,11 @@ LƯU Ý: Không dùng LaTeX $...$. Viết thẳng 100 °C, 1 atm, H₂O, CO₂.`
       }
     }
 
-    const answer = getClientPedagogicalFallback(rawInput, "suggest", grade);
-    return res.status(200).json({ text: answer });
+    const answer = getExperimentFallback(rawInput, grade);
+    return res.status(200).json({ text: normalizeChemistryText(answer) });
   } catch (error: any) {
     console.error("Vercel suggest-experiment error:", error);
-    const fallback = getClientPedagogicalFallback(req.body?.materials || "", "suggest", "8");
-    return res.status(200).json({ text: fallback });
+    const fallback = getExperimentFallback(req.body?.materials || "", "8");
+    return res.status(200).json({ text: normalizeChemistryText(fallback) });
   }
 }

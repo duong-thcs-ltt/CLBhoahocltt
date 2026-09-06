@@ -377,6 +377,85 @@ Khi dùng dao cắt hành, các tế bào thực vật bị phá vỡ giải ph�
 - **Giải thích khoa học:** Nước cốt chanh chứa axit citric (C₆H₈O₇) và các hợp chất carbon hữu cơ. Khi gặp nhiệt độ, axit citric làm yếu các sợi cellulose của giấy và bản thân nó bị oxi hoá, carbon hoá nhanh hơn giấy ở nhiệt độ thấp hơn, chuyển thành màu nâu vàng.`);
   }
 
+  if (
+    q.includes("dẫn điện") ||
+    q.includes("dan dien") ||
+    (q.includes("kim loại") && q.includes("nước")) ||
+    (q.includes("kim loai") && q.includes("nuoc")) ||
+    q.includes("chất dẫn điện") ||
+    q.includes("chat dan dien") ||
+    q.includes("cách điện")
+  ) {
+    return normalizeChemistryText(`Chào em! Cô Huỳnh Thị Thuỳ Dương rất khen ngợi câu hỏi mang tính bản chất vật chất và tư duy thực nghiệm của em. Cô giải đáp thắc mắc khoa học này như sau:
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+**Kim loại dẫn điện tốt hơn nước rất nhiều.**
+Trong thực tế, **nước tinh khiết (nước cất)** gần như không dẫn điện (được coi là chất cách điện). Chỉ có nước có hoà tan muối khoáng hoặc axit/bazơ mới dẫn điện được, nhưng khả năng dẫn điện của dung dịch này vẫn thua xa kim loại hàng triệu lần!
+
+### 2. Bản chất khoa học đằng sau
+Dòng điện là dòng chuyển dời có hướng của các hạt mang điện tích. Sở dĩ kim loại dẫn điện vượt trội là vì:
+- **Trong kim loại (đồng Cu, nhôm Al, sắt Fe, bạc Ag...):** Các nguyên tử kim loại nhường electron hoá trị để tạo thành một "biển electron tự do" di chuyển cực kỳ linh động khắp mạng tinh thể. Khi đặt vào hiệu điện thế, hàng tỷ electron này lập tức chuyển động có hướng với tốc độ cực nhanh, tạo thành dòng điện mạnh.
+- **Trong nước nguyên chất (H₂O):** Nước được cấu tạo từ các phân tử trung hoà điện H₂O liên kết cộng hoá trị. Sự tự ion hoá của nước thành H⁺ và OH⁻ là vô cùng nhỏ (chỉ khoảng 10⁻⁷ mol/L), nên hầu như không có hạt mang điện tự do để dẫn điện.
+- **Nước sinh hoạt và nước muối:** Nước máy hay nước sông có dẫn điện là do có hoà tan các khoáng chất (chất điện li như NaCl, Ca²⁺, Mg²⁺, Cl⁻...). Tuy nhiên, các ion này có kích thước và khối lượng lớn gấp hàng nghìn lần electron, lại bị các phân tử nước cản trở nên di chuyển chậm chạp hơn rất nhiều so với electron trong kim loại.
+
+### 3. Ứng dụng thực tế đời sống thú vị
+- **Hệ thống dây điện:** Lõi dây dẫn điện trong nhà và trường THCS Lý Tự Trọng luôn được làm bằng đồng đỏ (Cu) hoặc nhôm (Al) vì kim loại dẫn điện ưu việt; còn vỏ bọc ngoài làm bằng nhựa cách điện.
+- **Quy tắc an toàn điện:** Nước sinh hoạt và mồ hôi trên tay chúng ta có lẫn muối khoáng nên dẫn điện được. Tuyệt đối KHÔNG chạm tay ướt vào công tắc, phích cắm điện vì nước sẽ làm giảm điện trở của da và truyền dòng điện nguy hiểm vào cơ thể!
+
+### 4. Thử thách nhỏ dành cho em
+Cô đố em: Theo em, giữa nước cất nguyên chất và nước chanh pha muối, nước nào sẽ làm bóng đèn trong mạch điện sáng rõ hơn? Vì sao nhỉ?`);
+  }
+
+  if (q.includes("dẫn nhiệt") || q.includes("dan nhiet")) {
+    return normalizeChemistryText(`Chào em! Cô giải đáp câu hỏi về khả năng dẫn nhiệt của các chất:
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+**Kim loại là những chất dẫn nhiệt tốt nhất.** Chất lỏng (như nước) và chất khí dẫn nhiệt kém hơn kim loại rất nhiều lần.
+
+### 2. Bản chất khoa học
+- Trong kim loại, nhiệt lượng được truyền đi nhanh chóng nhờ sự va chạm của các electron tự do và dao động nhiệt của các ion dương ở nút mạng tinh thể.
+- Trong nước và chất lỏng, các phân tử cách xa nhau hơn và không có electron tự do mang nhiệt, nhiệt chủ yếu truyền bằng hình thức đối lưu (dòng chất lỏng nóng nổi lên, chất lỏng lạnh chìm xuống) thay vì dẫn nhiệt trực tiếp.
+
+### 3. Ứng dụng thực tế
+- Đáy xoong, nồi, chảo làm bằng inox, nhôm hoặc gang để bắt nhiệt nhanh làm chín thức ăn.
+- Quai nồi, tay cầm chảo thường bọc gỗ hoặc nhựa chịu nhiệt (vật liệu dẫn nhiệt kém) để chúng ta cầm không bị bỏng tay.`);
+  }
+
+  if (q.includes("thể tích mol") || q.includes("the tich mol") || q.includes("24,79") || q.includes("22,4") || q.includes("đkc")) {
+    return normalizeChemistryText(`Chào em! Cô Dương lưu ý em điểm mới CỰC KỲ QUAN TRỌNG trong chương trình KHTN mới (bộ sách Kết nối tri thức - GDPT 2018):
+
+### 1. Quy chuẩn chuẩn mực
+- **Ở điều kiện chuẩn (đkc):** Nhiệt độ 25 °C (tương đương 298 K) và áp suất 1 bar:
+  **Thể tích của 1 mol chất khí bất kì là 24,79 L.**
+- Công thức tính: \`V = n × 24,79\` (với n là số mol chất khí).
+- **Lưu ý đặc biệt:** Tuyệt đối không dùng con số cũ **22,4 L** nữa nhé! (22,4 L là ở 0 °C, 1 atm của chương trình cũ).
+
+### 2. Ý nghĩa khoa học (Định luật Avogadro)
+Ở cùng điều kiện nhiệt độ và áp suất, các thể tích bằng nhau của bất kỳ chất khí nào (O₂, H₂, CO₂, N₂...) đều chứa cùng số lượng phân tử.`);
+  }
+
+  if (
+    (q.includes("sắt") || q.includes("fe")) &&
+    (q.includes("hcl") || q.includes("fecl2") || q.includes("fecl3") || q.includes("axit clohidric") || q.includes("axit clohiđric"))
+  ) {
+    return normalizeChemistryText(`Chào em! Đây là câu hỏi rất kinh điển và hay gặp trong các bài kiểm tra Hoá học THCS KNTT Lớp 8 & 9. Cô Dương giải thích rõ bản chất cho em nhé:
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+Khi cho sắt (Fe) tác dụng với dung dịch axit clohiđric (HCl), phản ứng **chỉ tạo ra muối Sắt(II) clorua (FeCl₂) và giải phóng khí Hydrogen (H₂)**, tuyệt đối **không sinh ra FeCl₃**.
+Phương trình hoá học:
+**Fe + 2HCl → FeCl₂ + H₂↑**
+
+### 2. Bản chất khoa học
+- Axit HCl (và H₂SO₄ loãng) là những chất oxi hoá có tính oxi hoá trung bình (chính ion H⁺ thể hiện tính oxi hoá). Chúng chỉ có khả năng oxi hoá nguyên tử Fe lên mức oxi hoá +2 (muối Fe²⁺).
+- Muốn tạo ra muối Sắt(III) clorua (FeCl₃), ta phải dùng chất oxi hoá rất mạnh như khí Clo (Cl₂) khô nung nóng:
+  **2Fe + 3Cl₂ —(t°)→ 2FeCl₃**
+
+### 3. Mẹo ghi nhớ của Cô Dương
+- Sắt gặp **HCl, H₂SO₄ loãng**: Ra sắt **II** (Fe²⁺).
+- Sắt gặp **khí Cl₂ nung nóng**: Ra sắt **III** (Fe³⁺).
+- Sắt cháy trong **O₂ nung nóng**: Ra **Fe₃O₄** (oxit sắt từ, hỗn hợp FeO và Fe₂O₃).`);
+  }
+
   if (mode === "khkt" || q.includes("khkt") || q.includes("nckh") || q.includes("đề tài") || q.includes("tây ninh")) {
     return normalizeChemistryText(`### Định hướng Đề tài Nghiên cứu KHKT ViSEF dành cho học sinh THCS
 
