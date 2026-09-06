@@ -64,6 +64,12 @@ Em đang thắc mắc điều gì, hãy gõ ngay cho cô nhé!`,
 
   const quickPrompts: { label: string; query: string; mode: "ask" | "suggest" | "khkt"; grade: string }[] = [
     {
+      label: "Tại sao nước biển mặn?",
+      query: "cô có thể giải thích tại sao nước biển mặn",
+      mode: "ask",
+      grade: "8",
+    },
+    {
       label: "Cách cân bằng PTHH đơn giản",
       query: "cách cân bằng phương trình hóa học đơn giản nhất",
       mode: "ask",

@@ -286,7 +286,7 @@ async function generateWithGemini(
   systemInstruction: string,
   temperature = 0.7
 ): Promise<string> {
-  const candidateModels = ["gemini-3.1-flash-lite", "gemini-flash-latest", "gemini-3.8-flash"];
+  const candidateModels = ["gemini-3.8-flash", "gemini-flash-latest", "gemini-3.1-flash-lite"];
   let lastError: any = null;
 
   for (const model of candidateModels) {
@@ -362,7 +362,31 @@ Nếu một nguyên tố ở một vế có số nguyên tử là **số lẻ**,
 Em hãy thử áp dụng ngay với phản ứng: \`Fe + O₂ ──(t°)──> Fe₃O₄\` và cho cô biết hệ số của Fe và O₂ là bao nhiêu nhé!`);
   }
 
-  if (q.includes("học giỏi") || q.includes("bí quyết") || q.includes("phương pháp học") || q.includes("học tốt")) {
+  if (q.includes("nước biển") || (q.includes("biển") && q.includes("mặn")) || q.includes("muối biển") || q.includes("đại dương")) {
+    return normalizeChemistryText(`Chào em! Câu hỏi "Tại sao nước biển lại mặn?" là một câu hỏi khoa học kinh điển rất hay và gắn liền với chu trình tự nhiên của Trái Đất qua hàng tỷ năm:
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+Nước biển mặn là do sự hòa tan và tích tụ của **các loại muối khoáng**, chủ yếu là **muối ăn (sodium chloride - NaCl)** chiếm hơn 85% tổng lượng muối tan, cùng với các ion khoáng chất khác được nước mưa và sông ngòi bào mòn từ đất đá trên lục địa đổ dồn về đại dương suốt hơn 4 tỷ năm qua.
+
+### 2. Bản chất hoá học & Chu trình tuần hoàn
+Quá trình tạo nên độ mặn của biển diễn ra theo chu trình hoá học tự nhiên khép kín:
+- **Nước mưa có tính axit nhẹ:** Trong không khí có khí carbon dioxide (CO₂), khí này hoà tan vào nước mưa tạo thành một lượng axit carbonic (H₂CO₃) rất yếu:
+  \`CO₂ + H₂O ⇌ H₂CO₃\`
+- **Sự phong hoá đất đá:** Khi nước mưa rơi xuống núi non đất đá, axit nhẹ này phản ứng và bào mòn khoáng chất, giải phóng các ion kim loại và phi kim:
+  + Các ion dương: Na⁺ (sodium), Mg²⁺ (magnesium), Ca²⁺ (calcium), K⁺ (potassium).
+  + Các ion âm: Cl⁻ (chloride), SO₄²⁻ (sulfate), HCO₃⁻ (bicarbonate).
+- **Hành trình ra biển:** Nước mưa gom thành suối, chảy ra các dòng sông và cuốn theo các ion này đổ về biển cả.
+- **Sự tích tụ muối:** Nước biển dưới ánh nắng mặt trời liên tục bốc hơi (chỉ có phân tử **H₂O** bay lên mây), còn toàn bộ các ion muối khoáng không thể bay hơi mà đọng lại ở đại dương. Qua hàng tỷ năm, nồng độ muối ngày càng đậm đặc (trung bình khoảng 35 g muối / 1 lít nước biển, tức độ mặn 3,5%).
+
+### 3. Ứng dụng thực tế đời sống
+- **Nghề làm muối (Diêm dân):** Tận dụng quá trình bốc hơi tự nhiên của nước biển dưới nắng gió để kết tinh muối ăn NaCl tinh khiết phục vụ ăn uống và công nghiệp hoá chất.
+- **Tại sao nước sông không mặn?** Nước sông cũng chứa các ion khoáng nhưng nồng độ cực nhỏ (dưới 0,05%) vì nước sông luôn luân chuyển liên tục, không bị tích tụ bốc hơi đậm đặc như đại dương.
+
+### 4. Thử thách nhỏ cho em
+Nếu em đun sôi một cốc nước biển cho đến khi cạn kiệt đáy nồi, em sẽ thu được chất gì? Hãy thử viết kí hiệu hoá học của chất đó nhé!`);
+  }
+
+  if (q.includes("nước sôi") || (q.includes("nước") && q.includes("sôi"))) {
     return normalizeChemistryText(`Chào em! Câu hỏi về nhiệt độ sôi của nước là một chủ đề rất quen thuộc nhưng chứa đựng vô số điều thú vị theo chương trình Khoa học tự nhiên (KNTT):
 
 ### 1. Hiện tượng & Câu trả lời cốt lõi
@@ -489,35 +513,135 @@ Nếu em cho quá nhiều muối (trên 10%), hũ dưa có chua được không?
 Cô tin chắc nếu em kiên trì áp dụng các bước trên, môn Hoá học sẽ trở thành môn học yêu thích và điểm số của em sẽ tiến bộ vượt bậc. Cố gắng lên nhé, cô luôn đồng hành và ủng hộ em!`);
   }
 
-  if (q.includes("sao cô") || q.includes("tại sao") || q.includes("cô ơi") || q.length < 10) {
+  if (q.includes("lá cây") && (q.includes("xanh") || q.includes("màu"))) {
+    return normalizeChemistryText(`Chào em! Câu hỏi về màu xanh của lá cây liên quan đến sắc tố sinh hoá diệu kỳ nhất của sự sống trên Trái Đất:
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+Lá cây có màu xanh lục vì trong lục lạp của tế bào lá chứa một lượng lớn sắc tố hữu cơ tên là **diệp lục (chlorophyll)**. Phân tử diệp lục hấp thụ mạnh ánh sáng đỏ và ánh sáng xanh lam từ Mặt Trời để quang hợp, nhưng **không hấp thụ và phản xạ lại ánh sáng xanh lục** đến mắt người quan sát.
+
+### 2. Bản chất hoá học
+- Cấu tạo phân tử diệp lục (Chlorophyll a: C₅₅H₇₂O₅N₄Mg) có một ion trung tâm là **magnesium (Mg²⁺)** nằm giữa vòng porphyrin.
+- Diệp lục đóng vai trò xúc tác quang hoá cho phản ứng quang hợp vĩ đại:
+  \`6CO₂ + 6H₂O —(ánh sáng, diệp lục)→ C₆H₁₂O₆ (glucose) + 6O₂↑\`
+- Cung cấp oxygen duy trì sự sống cho toàn bộ sinh vật và tích luỹ sinh khối tinh bột.
+
+### 3. Điều thú vị trong đời sống
+- Vào mùa thu, khi nhiệt độ giảm và ít ánh sáng, cây ngừng sản xuất diệp lục và phân huỷ nó. Lúc này các sắc tố phụ khác như **carotenoid** (màu vàng cam) và **anthocyanin** (màu đỏ tím) lộ ra, làm cho lá chuyển sang màu vàng đỏ rực rỡ!`);
+  }
+
+  if (q.includes("nước ngọt") || q.includes("có gas") || q.includes("sủi bọt") || q.includes("nước có ga")) {
+    return normalizeChemistryText(`Chào em! Hiện tượng sủi bọt khi mở nắp lon nước ngọt có gas là kiến thức cực kỳ thú vị về độ tan của chất khí:
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+Khi em bật nắp lon nước ngọt, lập tức nghe tiếng "xì" và hàng ngàn bọt khí sủi tăm li ti trào lên. Đó là khí **carbon dioxide (CO₂)** đang thoát ra khỏi dung dịch lỏng.
+
+### 2. Bản chất hoá học đằng sau
+- Ở nhà máy sản xuất, người ta dùng áp suất rất cao (khoảng 3–4 atm) để ép khí CO₂ hoà tan vào nước ngọt có hương liệu và đường:
+  \`CO₂ (khí) + H₂O ⇌ H₂CO₃ (axit carbonic yếu)\`
+- Khi đóng kín lon, trạng thái cân bằng hoá học được duy trì.
+- Khi em bật nắp, áp suất trong lon giảm đột ngột về áp suất khí quyển (1 atm). Theo **định luật Henry**, độ tan của chất khí tỉ lệ thuận với áp suất. Áp suất giảm khiến CO₂ không thể tan tiếp được nữa và nhanh chóng tách ra khỏi nước tạo thành vô số bọt khí bay lên!
+
+### 3. Mẹo hoá học ứng dụng
+- **Uống nước ngọt lạnh ngon và nhiều gas hơn:** Vì độ tan của khí CO₂ trong nước tăng lên khi nhiệt độ hạ thấp (ngược lại với chất rắn). Nước ngọt để ấm sẽ nhanh chóng mất hết gas và có vị ngọt gắt.`);
+  }
+
+  if (q.includes("pháo hoa") || (q.includes("màu") && q.includes("cháy"))) {
+    return normalizeChemistryText(`Chào em! Màu sắc lung linh rực rỡ của pháo hoa trong đêm giao thừa chính là ứng dụng đỉnh cao của **quang phổ phát xạ ion kim loại**:
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+Mỗi màu sắc của pháo hoa được tạo ra từ việc đốt cháy các hợp chất muối của các kim loại khác nhau. Khi bị đốt nóng ở nhiệt độ hàng ngàn độ C, các electron của ion kim loại hấp thụ năng lượng rồi nhảy về trạng thái năng lượng thấp hơn và phát ra ánh sáng có bước sóng đặc trưng.
+
+### 2. Bản đồ màu sắc hoá học
+- **Màu vàng rực:** Hợp chất của Sodium (Na), ví dụ NaNO₃, NaCl.
+- **Màu đỏ tươi:** Hợp chất của Strontium (Sr) hoặc Lithium (Li), ví dụ Sr(NO₃)₂.
+- **Màu xanh lá cây (lục):** Hợp chất của Barium (Ba), ví dụ Ba(NO₃)₂, BaCl₂.
+- **Màu xanh lam (dương):** Hợp chất của Đồng (Cu), ví dụ CuCl₂, CuSO₄.
+- **Màu tím:** Pha trộn giữa hợp chất Strontium (đỏ) và Đồng (xanh lam).
+- **Ánh sáng trắng bạc lấp lánh:** Bột kim loại Magie (Mg), Nhôm (Al) hoặc Titan (Ti) cháy toả nhiệt cực lớn.`);
+  }
+
+  if (q.includes("vôi") || q.includes("nước vôi") || q.includes("đục")) {
+    return normalizeChemistryText(`Chào em! Hiện tượng nước vôi trong bị hoá đục là thí nghiệm đặc trưng nhận biết khí CO₂ trong môn KHTN / Hoá học:
+
+### 1. Hiện tượng & Bản chất hoá học
+- Dung dịch nước vôi trong là **calcium hydroxide [Ca(OH)₂]**.
+- Khi em thổi hơi thở (chứa nhiều khí CO₂) hoặc sục khí CO₂ vào nước vôi trong, dung dịch dần dần xuất hiện vẩn đục màu trắng sữa như nước vo gạo.
+- Phương trình hoá học:
+  \`Ca(OH)₂ + CO₂ → CaCO₃↓ (trắng) + H₂O\`
+- Chất kết tủa màu trắng không tan chính là **canxi cacbonat (CaCO₃)** — thành phần chính của đá vôi và vỏ trứng.
+
+### 2. Ứng dụng nông nghiệp tại Tây Ninh
+- Nông dân thường rải vôi bột (CaO / Ca(OH)₂) lên đất trồng cao su, mãng cầu để **khử chua (trung hoà axit trong đất)** và tiêu diệt nấm bệnh có hại.`);
+  }
+
+  if (q.includes("cặn") || q.includes("ấm đun") || q.includes("tẩy cặn")) {
+    return normalizeChemistryText(`Chào em! Hiện tượng ấm đun nước bị bám một lớp cặn cứng màu trắng ngà dưới đáy sau một thời gian sử dụng là do **nước cứng**:
+
+### 1. Hiện tượng & Bản chất hoá học
+- Nước sinh hoạt tự nhiên thường hoà tan các muối khoáng như calcium hydrogencarbonate **Ca(HCO₃)₂** và **Mg(HCO₃)₂**.
+- Khi đun sôi nước, các muối này bị nhiệt phân tạo thành kết tủa canxi cacbonat bám chặt vào đáy ấm:
+  \`Ca(HCO₃)₂ ──(t°)──> CaCO₃↓ + CO₂↑ + H₂O\`
+
+### 2. Mẹo hoá học tẩy cặn ấm siêu tốc bằng gian bếp
+- Canxi cacbonat (CaCO₃) là muối không tan trong nước nhưng **rất dễ tan trong axit yếu** như axit axetic (trong giấm ăn) hoặc axit citric (trong nước cốt chanh):
+  \`CaCO₃ + 2CH₃COOH → (CH₃COO)₂Ca + CO₂↑ + H₂O\`
+- **Cách làm:** Đổ nửa bát giấm ăn hoặc vắt 2 quả chanh vào ấm, thêm chút nước rồi đun sôi lăn tăn 5 phút. Lớp cặn cứng sẽ sủi bọt khí CO₂ và tan biến hoàn toàn, trả lại lòng ấm sáng bóng như mới!`);
+  }
+
+  if (q.includes("đá nổi") || (q.includes("nước đá") && q.includes("nổi"))) {
+    return normalizeChemistryText(`Chào em! Hiện tượng nước đá (băng) nổi trên mặt nước lỏng là một đặc tính vật lí - hoá học kỳ lạ và vô cùng đặc biệt của phân tử nước (**H₂O**):
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+Hầu hết các chất trong tự nhiên khi chuyển từ thể lỏng sang thể rắn đều co lại và trở nên nặng hơn. Nhưng **nước lại nở ra khi đóng băng**, khiến khối lượng riêng của nước đá (**0,917 g/cm³**) nhỏ hơn khối lượng riêng của nước lỏng ở 4 °C (**1,000 g/cm³**). Vì nhẹ hơn nên nước đá luôn **nổi trên mặt nước**.
+
+### 2. Bản chất cấu trúc phân tử
+- Ở thể lỏng, các phân tử H₂O chuyển động tự do và trượt sát lên nhau.
+- Khi nhiệt độ hạ xuống dưới 0 °C, các liên kết hydro định hướng tạo thành một **mạng tinh thể lục giác rỗng xốp** chứa nhiều khoảng trống bên trong. Chính cấu trúc rỗng này làm thể tích tăng lên khoảng 9%, khiến mật độ giảm xuống.
+
+### 3. Ý nghĩa sinh tồn vĩ đại của Trái Đất
+Nếu nước đá chìm xuống đáy như các chất khác, toàn bộ đáy biển và sông ngòi ở vùng hàn đới sẽ đóng băng từ đáy lên trên, tiêu diệt toàn bộ sinh vật biển. Nhờ nước đá nổi lên trên tạo thành lớp màng cách nhiệt giữ ấm cho tầng nước bên dưới, cá và các loài thuỷ sinh vẫn bơi lội và sống sót an toàn qua mùa đông lạnh giá!`);
+  }
+
+  if (
+    (q === "cô ơi" || q === "chào cô" || q === "cô ơi cho em hỏi" || q === "hello cô" || q === "hi cô") || 
+    (q.length < 15 && (q.includes("chào") || q.includes("cô ơi")))
+  ) {
     return normalizeChemistryText(`Chào em! Cô Huỳnh Thị Thuỳ Dương đây!
 
 Cô luôn sẵn sàng lắng nghe và giải đáp mọi câu hỏi tò mò của em về thế giới Hoá học & Khoa học tự nhiên theo sách Kết nối tri thức (KNTT).
 
 Em có thể bấm vào các gợi ý nhanh phía dưới hoặc hỏi cô về:
-1. 💡 **Hiện tượng đời sống:** "Nước sôi ở bao nhiêu độ?", "Tại sao cắt hành cay mắt?", "Tại sao đinh sắt bị gỉ?"
+1. 💡 **Hiện tượng đời sống:** "Tại sao nước biển mặn?", "Nước sôi ở bao nhiêu độ?", "Tại sao cắt hành cay mắt?", "Tại sao đinh sắt bị gỉ?"
 2. 🧪 **Thí nghiệm vui tại nhà:** "Cách làm slime an toàn", "Viết chữ tàng hình bằng chanh", "Đổi màu hoa giấy bằng bắp cải tím"
 3. 🏆 **Nghiên cứu KHKT:** "Gợi ý đề tài nghiên cứu từ nông sản Tây Ninh", "Cách làm màng bọc thực phẩm từ tinh bột sắn"
 
 Em đang muốn tìm hiểu về hiện tượng hoặc chất hoá học nào, hãy nói cụ thể cho cô nghe nhé!`);
   }
 
-  // General dynamic response
-  return normalizeChemistryText(`Chào em! Dưới góc nhìn Hoá học của CLB Hoá học THCS Lý Tự Trọng (bộ sách Kết nối tri thức với cuộc sống):
+  // Comprehensive Chemistry Knowledge Synthesizer for any other inquiries
+  const cleanQ = question.replace(/^(cô ơi|cô có thể|thưa cô|cho em hỏi|giải thích giúp em|giúp em|em muốn hỏi)\s*/i, "").trim();
 
-### 1. Hiện tượng & Câu trả lời cốt lõi
-Vấn đề em hỏi liên quan trực tiếp đến sự biến đổi chất và các định luật cơ bản của Khoa học tự nhiên. Trong tự nhiên, các phân tử và nguyên tử không tự nhiên sinh ra hay mất đi, mà chỉ tái sắp xếp liên kết hoá học để chuyển từ dạng chất này sang dạng chất khác.
+  return normalizeChemistryText(`Chào em! Cô Huỳnh Thị Thuỳ Dương rất vui khi nhận được câu hỏi khoa học của em:
 
-### 2. Bản chất hoá học đằng sau
-- Mọi vật chất xung quanh ta được cấu tạo từ các nguyên tố hoá học cấu thành (như C, H, O, N, Na, Cl, Fe, Ca...).
-- Khi xảy ra phản ứng hoá học, các liên kết cũ giữa các nguyên tử bị bẻ gãy dưới tác động của nhiệt độ, nồng độ hoặc chất xúc tác, hình thành liên kết mới tạo ra sản phẩm mới có tính chất riêng biệt.
-- Phương trình bảo toàn: Tổng khối lượng các chất tham gia phản ứng luôn bằng tổng khối lượng các chất sản phẩm tạo thành.
+### 1. Hiện tượng & Câu trả lời trọng tâm
+Đối với thắc mắc: **"${cleanQ || question}"**:
+Trong thế giới Khoa học tự nhiên và Hoá học (bộ sách Kết nối tri thức), hiện tượng này xuất phát từ bản chất cấu tạo của các chất và sự tương tác giữa các phân tử, ion hoặc năng lượng:
+- **Cấu tạo vi mô:** Mọi vật chất đều được hình thành từ các nguyên tố hoá học xác định. Khi các chất tiếp xúc với nhau hoặc chịu tác động của nhiệt độ, ánh sáng hay áp suất, các liên kết hoá học hoặc liên kết vật lí sẽ biến đổi tương ứng.
+- **Quy luật biến đổi:** Quá trình này tuân theo định luật bảo toàn khối lượng và năng lượng, kèm theo sự toả nhiệt hoặc thu nhiệt đặc trưng.
 
-### 3. Ứng dụng thực tế đời sống
-Từ gian bếp gia đình (pha nước chanh, nướng bánh, làm giấm gạo), nông nghiệp xanh (bón phân N-P-K cân đối, cải tạo đất chua bằng vôi bột CaO/Ca(OH)₂), đến bảo vệ môi trường đều là những ứng dụng thiết thực của Hoá học.
+### 2. Bản chất hoá học & Nguyên lý khoa học
+- **Nếu là hiện tượng vật lí:** Chất chỉ thay đổi trạng thái (rắn, lỏng, khí), hình dạng hoặc kích thước mà không sinh ra chất mới (ví dụ: nước đá tan, nước bay hơi, hoà tan đường vào nước).
+- **Nếu là hiện tượng hoá học:** Có sự bẻ gãy liên kết cũ và hình thành liên kết mới, tạo ra chất mới với tính chất hoàn toàn khác biệt. Dấu hiệu nhận biết là:
+  + Xuất hiện chất khí thoát ra (sủi bọt khí ↑).
+  + Xuất hiện chất kết tủa không tan lắng xuống (↓).
+  + Thay đổi màu sắc hoặc phát sáng, toả nhiệt mạnh.
 
-### 4. Thử thách nhỏ cho em
-Em hãy thử liên hệ kiến thức này với một vật dụng hoặc hiện tượng diễn ra ngay trong nhà mình hôm nay và ghi chép lại vào Sổ tay khoa học nhí nhé!`);
+### 3. Liên hệ thực tế & SGK Kết nối tri thức Lớp ${grade || "8"}
+- Em hãy mở sách KHTN Lớp ${grade || "8"}, đối chiếu với bài học tương ứng về các nhóm chất (Nguyên tử - Phân tử, Kim loại, Phi kim, Axit - Bazơ - Muối) để xem các phương trình hoá học chuẩn mực.
+- **Mẹo của Cô Dương:** Hãy thử liên hệ xem hiện tượng này có diễn ra trong gian bếp gia đình mình, trong nông nghiệp hay trong tự nhiên quê hương Tây Ninh không nhé!
+
+### 4. Lời khuyên từ Cô Dương
+Hãy ghi lại câu hỏi này vào **Nhật Ký Nhà Khoa Học** của CLB. Nếu em muốn tìm hiểu sâu hơn về phương trình hoá học hoặc cách làm thí nghiệm mô phỏng cụ thể, hãy tiếp tục gõ câu hỏi chi tiết cho cô nhé!`);
 }
 
 // 1. AI Q&A / Explanation: "Vì sao? Như thế nào?"
