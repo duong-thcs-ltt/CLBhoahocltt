@@ -76,6 +76,37 @@ Dưới đây là 5 bí quyết vàng từ Cô Dương giúp em học giỏi Ho�
 Chúc em luôn tràn đầy cảm hứng khám phá khoa học nhé!`);
   }
 
+  if (
+    q.includes("sản xuất muối") ||
+    q.includes("san xuat muoi") ||
+    q.includes("làm muối") ||
+    q.includes("lam muoi") ||
+    q.includes("người ta sản xuất muối") ||
+    q.includes("nguoi ta san xuat muoi") ||
+    (q.includes("muối") && (q.includes("ruộng") || q.includes("bay hơi") || q.includes("kết tinh") || q.includes("tạo ra") || q.includes("như thế nào")))
+  ) {
+    return normalizeChemistryText(`Chào em, cô rất vui khi thấy em quan tâm đến những hiện tượng khoa học ngay trong đời sống hàng ngày! Câu hỏi của em về **"cách sản xuất muối"** rất thú vị, đặc biệt khi chúng ta liên hệ với những vùng làm muối nổi tiếng ở nước ta như Cà Ná (Ninh Thuận) hay Bạc Liêu:
+
+### 1. Hiện tượng & Câu trả lời cốt lõi
+Muối ăn (thành phần chính là **sodium chloride - NaCl**) mà chúng ta sử dụng hàng ngày chủ yếu được sản xuất từ nước biển thông qua phương pháp **kết tinh bằng cách làm bay hơi nước**.
+
+Quy trình cơ bản là: Dẫn nước biển vào các ruộng muối (ô nề), dưới tác động của ánh nắng mặt trời và gió, nước sẽ bay hơi dần. Khi nồng độ muối trong nước biển đạt đến mức bão hòa, muối sẽ bắt đầu kết tinh thành các tinh thể rắn màu trắng trên mặt ruộng để diêm dân thu hoạch.
+
+### 2. Quy trình 4 bước sản xuất muối truyền thống từ nước biển
+1. **Lấy nước biển vào ruộng chứa (Ruộng phơi nước):** Dẫn nước biển triều cường vào các mương dẫn rồi vào các ô phơi thô để lắng bớt bùn cát và tạp chất lơ lửng.
+2. **Cô đặc nước muối (Tăng độ mặn):** Nước biển được chuyển dần qua các ô phơi nông hơn (ô chịu, ô xắp). Ánh nắng mặt trời gay gắt và gió biển làm phân tử nước (**H₂O**) bay hơi liên tục, làm nồng độ muối tăng từ khoảng 3,5% lên 20–25% (nước chạt).
+3. **Kết tinh muối (Ô kết tinh):** Khi nước chạt đạt độ bão hòa (khoảng 25–28 độ Bé), nước được tháo vào ô kết tinh có nền đất nện chặt hoặc lót bạt HDPE sạch. Tại đây, tinh thể **NaCl** bắt đầu lắng đọng và kết tinh thành những hạt muối trắng tinh.
+4. **Thu hoạch & Tinh chế:** Diêm dân dùng bừa cào muối thành từng đống hình chóp để ráo nước chạt (chứa các muối magie, canxi đắng), sau đó vận chuyển về kho và đưa vào nhà máy tinh chế, bổ sung vi chất **Iodine (I-ốt)** chống bệnh bướu cổ trước khi đóng gói thành phẩm.
+
+### 3. Bản chất hoá học & SGK KNTT (Lớp 8 & 9)
+- **Phương pháp tách chất:** Sản xuất muối là ví dụ tiêu biểu nhất của phương pháp **cô cạn và kết tinh** dựa trên độ tan và sự bay hơi của dung môi (nước).
+- **Phân tách phân đoạn:** Ở nồng độ thấp, thạch cao (CaSO₄) kết tinh trước; tiếp đến là muối ăn (NaCl) kết tinh ở độ mặn lý tưởng; cuối cùng các muối có vị đắng như MgCl₂, MgSO₄ còn lại trong nước ót được loại bỏ để hạt muối có vị mặn thanh khiết.
+- **Vai trò công nghiệp:** Muối ăn NaCl là nguyên liệu đầu vào để sản xuất xút (NaOH), khí clo (Cl₂), nước Javel tẩy rửa và axit clohiđric (HCl).
+
+### 4. Thử thách nhỏ cho em
+Vì sao các cánh đồng muối lớn nhất Việt Nam lại tập trung ở Duyên hải Nam Trung Bộ (Ninh Thuận, Bình Thuận) mà không nằm ở miền Bắc? Yếu tố thời tiết nào quyết định năng suất làm muối của diêm dân?`);
+  }
+
   if (q.includes("nước biển") || (q.includes("biển") && q.includes("mặn")) || q.includes("muối biển") || q.includes("đại dương")) {
     return normalizeChemistryText(`Chào em! Câu hỏi "Tại sao nước biển lại mặn?" là một câu hỏi khoa học kinh điển rất hay và gắn liền với chu trình tự nhiên của Trái Đất qua hàng tỷ năm:
 
