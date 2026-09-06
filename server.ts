@@ -259,22 +259,35 @@ apiRouter.post("/club-cover", (req: Request, res: Response) => {
 
 // System persona prompt for the Chemistry Teacher & AI Scientist
 const TEACHER_SYSTEM_PROMPT = `Bạn là Trợ lý AI đồng hành cùng Cô Huỳnh Thị Thùy Dương (Chủ nhiệm CLB Hoá học, Giáo viên Hoá học - Tổ KHTN, Trường THCS Lý Tự Trọng, Tây Ninh).
-Bạn là chuyên gia AI giáo dục, nhà khoa học hoá học và nhà sư phạm tâm huyết có nhiều năm kinh nghiệm giảng dạy môn Khoa học tự nhiên (phân môn Hoá học) lớp 6, 7, 8, 9 theo bộ sách "Kết nối tri thức với cuộc sống" (KNTT).
+Bạn là chuyên gia AI giáo dục, nhà khoa học hoá học và nhà sư phạm tâm huyết có nhiều năm kinh nghiệm giảng dạy môn Khoa học tự nhiên (phân môn Hoá học, Vật lý, Sinh học và STEM) lớp 6, 7, 8, 9 theo bộ sách "Kết nối tri thức với cuộc sống" (KNTT).
 
-Tôn chỉ sư phạm:
-1. Luôn lắng nghe, thấu hiểu và trả lời ĐÚNG TRỌNG TÂM câu hỏi của học sinh:
-   - Nếu học sinh hỏi lời khuyên học tập, tâm sự, muốn học giỏi môn hoá: Đưa ra lời khuyên tâm huyết, lộ trình từng bước dễ hiểu, khích lệ tinh thần, truyền lửa đam mê.
-   - Nếu học sinh hỏi về hiện tượng khoa học, đời sống: Giải thích rõ ràng hiện tượng, bản chất hoá học, liên hệ thực tế gần gũi (gian bếp, đời sống Tây Ninh, nông sản), kèm phương trình hoá học chuẩn mực.
-   - Nếu học sinh hỏi bài tập, lý thuyết: Hướng dẫn phương pháp tư duy từng bước để học sinh tự tin tự giải.
-2. Ngôn ngữ trong sáng, gần gũi, chuẩn mực sư phạm THCS, tránh thuật ngữ hàn lâm khó hiểu.
-3. Luôn đảm bảo AN TOÀN TUYỆT ĐỐI khi thực hành thí nghiệm (kính bảo hộ, găng tay, không nếm/ngửi trực tiếp hoá chất).
-4. Khơi gợi tư duy khoa học, phương pháp quan sát - thử nghiệm - kết luận, khuyến khích sáng tạo KHKT ViSEF.
+TÔN CHỈ SƯ PHẠM ĐỂ GIẢI THÍCH DỄ HIỂU NHẤT CHO MỌI HỌC SINH:
+1. Luôn dùng hình ảnh ẩn dụ đời thường (Analogy) để biến khái niệm vi mô, trừu tượng thành hình ảnh quen thuộc:
+   - Nguyên tử: như hệ mặt trời thu nhỏ (hạt nhân ở giữa, các electron quay quanh theo lớp như các hành tinh).
+   - Phân tử & liên kết: như những bàn tay nắm chặt lấy nhau tạo thành khối vững chãi.
+   - Hóa trị: như số cánh tay của nguyên tử chìa ra để ghép nối tạo nên hợp chất.
+   - Độ tan & nồng độ: như độ ngọt đậm hay nhạt của một ly nước cam, nước chanh pha đường.
+   - Chất xúc tác / Enzyme: như người chỉ đường nhanh nhẹn hoặc chiếc chìa khoá mở then chốt phản ứng mà không bị mất đi.
+2. Trả lời đúng trọng tâm với cấu trúc 4 phần rõ ràng:
+   ### 1. Hiện tượng & Câu trả lời cốt lõi (Nêu bản chất ngay trong 1-2 câu đầu bằng từ ngữ giản dị)
+   ### 2. Bản chất khoa học đằng sau (Phân tích mạch lạc, phương trình chữ hoặc KHHH chuẩn Unicode)
+   ### 3. Ứng dụng thực tế đời sống thú vị (Liên hệ nhà bếp, đồ ăn thức uống, thiên nhiên hay danh lam Tây Ninh)
+   ### 4. Thử thách nhỏ / Câu hỏi gợi mở (Để kích thích học sinh tiếp tục tư duy)
+3. Ngôn ngữ trong sáng, gần gũi, ấm áp của Cô Dương, xưng "cô" và gọi "em", truyền cảm hứng yêu khoa học.
+4. Đảm bảo AN TOÀN TUYỆT ĐỐI trong mọi hướng dẫn thực nghiệm hay gợi ý thí nghiệm.
+
+QUY CHUẨN KIẾN THỨC CHUẨN XÁC SGK KẾT NỐI TRI THỨC (GDPT 2018):
+- Thể tích 1 mol chất khí ở điều kiện chuẩn (25 °C, 1 bar) là 24,79 L (tuyệt đối không dùng số cũ 22,4 L).
+- Phản ứng sắt (Fe): Fe + 2HCl → FeCl₂ + H₂↑ (sắt II); nhưng 2Fe + 3Cl₂ —(t°)→ 2FeCl₃ (sắt III); 3Fe + 2O₂ —(t°)→ Fe₃O₄ (oxit sắt từ).
+- Chỉ thị màu: Axit làm quỳ tím hoá đỏ; Kiềm/Bazơ tan làm quỳ tím hoá xanh; Phenolphthalein chỉ đổi màu hồng trong môi trường kiềm.
+- Dãy hoạt động hoá học: K, Na, Ca, Mg, Al, Zn, Fe, Pb, (H), Cu, Ag, Au (kim loại trước H mới giải phóng H₂ từ axit loãng).
+- An toàn pha loãng H₂SO₄ đặc: Rót từ từ axit vào nước, TUYỆT ĐỐI không rót nước vào axit đặc.
 
 QUY CHUẨN TRÌNH BÀY HOÁ HỌC & ĐƠN VỊ KHOA HỌC (BẮT BUỘC):
 - TUYỆT ĐỐI KHÔNG dùng cú pháp LaTeX thô như $100^\\circ\\text{C}$, $1\\text{ atm}$, $\\text{H}_2\\text{O}$, $\\text{CO}_2$, $\\text{Fe}^{3+}$.
 - Luôn sử dụng ký tự Unicode trực tiếp:
   + Nhiệt độ: '100 °C', '25 °C', '0 °C'.
-  + Áp suất & đơn vị: '1 atm', '101,3 kPa', '1 bar', '250 mL', '1 mol/L'.
+  + Áp suất & đơn vị: '1 atm', '101,3 kPa', '1 bar', '250 mL', '1 mol/L', '24,79 L'.
   + Công thức hoá học: H₂O, CO₂, O₂, N₂, H₂, CaCO₃, Al₂(SO₄)₃, BaSO₄, FeCl₂, FeCl₃, H₂SO₄, NaOH, Ca(OH)₂...
   + Điện tích ion: Fe²⁺, Fe³⁺, Cu²⁺, SO₄²⁻, Cl⁻, H⁺, OH⁻...
   + Phương trình phản ứng hoá học: viết trên dòng riêng, có mũi tên '→' (hoặc '—(t°)→' nếu có nhiệt độ), ghi rõ '↑' hoặc '↓'.`;
@@ -286,7 +299,7 @@ async function generateWithGemini(
   systemInstruction: string,
   temperature = 0.7
 ): Promise<string> {
-  const candidateModels = ["gemini-3.8-flash", "gemini-flash-latest", "gemini-3.1-flash-lite"];
+  const candidateModels = ["gemini-flash-latest", "gemini-3.1-flash-lite", "gemini-3.8-flash"];
   let lastError: any = null;
 
   for (const model of candidateModels) {
@@ -498,6 +511,75 @@ Rau cải cay nồng, đắng chát khi ngâm vào nước muối ấm (khoảng
 
 ### 4. Thử thách nhỏ cho em
 Nếu em cho quá nhiều muối (trên 10%), hũ dưa có chua được không? Vi khuẩn lactic sẽ ra sao trong dung dịch ưu trương đậm đặc đó?`);
+  }
+
+  if (
+    q.includes("hóa trị") ||
+    q.includes("hoa tri") ||
+    q.includes("nhớ hóa trị") ||
+    q.includes("nho hoa tri") ||
+    q.includes("bài ca hóa trị") ||
+    q.includes("bai ca hoa tri") ||
+    q.includes("bài thơ hóa trị") ||
+    q.includes("bai tho hoa tri") ||
+    q.includes("bảng hóa trị") ||
+    q.includes("bang hoa tri")
+  ) {
+    return normalizeChemistryText(`Chào các em học sinh thân yêu của cô tại trường THCS Lý Tự Trọng!
+
+Cô rất vui khi nhận được câu hỏi này. Hóa trị là "chìa khóa vàng" đầu tiên để các em mở cánh cửa vào thế giới Hóa học lớp 8 và 9 (SGK Kết nối tri thức). Đừng quá lo lắng, cô sẽ bật mí cho các em những "bí kíp" giúp ghi nhớ hóa trị một cách nhẹ nhàng và hiệu quả nhất nhé:
+
+### 1. Học qua bài thơ hóa trị (Cách truyền thống nhưng cực kỳ hiệu quả)
+Bài thơ hóa trị là "người bạn thân" của bao thế hệ học sinh. Nhịp điệu vần vè của bài thơ sẽ giúp các em nhớ hóa trị của các nguyên tố thường gặp một cách vô thức:
+
+*Đoạn thơ hóa trị kinh điển dễ thuộc nhất:*
+\`\`\`text
+Kali (K), Natri (Na), Hydro (H), Bạc (Ag) cùng với Clo (Cl),
+Một loài HÓA TRỊ I chẳng sai chút nào.
+Magie (Mg), Kẽm (Zn) với Thủy ngân (Hg),
+Oxy (O), Đồng (Cu), Thiếc (Sn) thêm phần Bari (Ba),
+Cuối cùng thêm chú Canxi (Ca),
+HÓA TRỊ II đó nhớ ghi cho tường!
+Nhôm (Al) HÓA TRỊ III chớ quên,
+Carbon (C), Silic (Si) tính bền IV thôi.
+\`\`\`
+
+### 2. Gom nhóm các nguyên tố theo hóa trị (Phương pháp tư duy logic)
+Thay vì học thuộc lòng từng nguyên tố rời rạc, các em hãy gom chúng theo các nhóm hóa trị cố định:
+- **Nhóm Hóa trị I:** H, Li, Na, K, Ag, Cl (trong muối clorua), F.
+  *(Mẹo nhớ câu vui: "Học Lớp Nào Không Ai Cho Phép" ── H, Li, Na, K, Ag, Cl, F).*
+- **Nhóm Hóa trị II:** O, Mg, Ca, Ba, Zn, Cu, Pb (chì).
+  *(Mẹo nhớ câu vui: "Bé Mang Cây Súng Bắn Phá Cuộc Xâm Lược" ── Be, Mg, Ca, Sr, Ba, Pb, Cu, Zn).*
+- **Nhóm Hóa trị III:** Al (Nhôm), Fe (Sắt khi mang hóa trị III).
+  *(Mẹo nhớ: "Anh Sắt Ba" ── Al, Fe III).*
+- **Nhóm nhiều hóa trị (Cần lưu ý đặc biệt):**
+  + **Sắt (Fe):** Thường có hóa trị **II** (FeCl₂, FeO) và hóa trị **III** (FeCl₃, Fe₂O₃).
+  + **Đồng (Cu):** Thường gặp hóa trị **II** (CuSO₄, CuO).
+  + **Carbon (C):** Hóa trị **II** (CO) và **IV** (CO₂).
+  + **Lưu huỳnh (S):** Hóa trị **II** (H₂S), **IV** (SO₂) và **VI** (SO₃, H₂SO₄).
+  + **Nitơ (N):** Hóa trị I, II, III, IV, V (thường gặp II, IV trong khí NO, NO₂).
+
+### 3. Hóa trị của các nhóm nguyên tử (Bắt buộc phải thuộc để viết CTHH)
+Khi viết công thức axit, bazơ và muối, các em xem cả nhóm nguyên tử như một "nguyên tố lớn":
+- **Nhóm Hóa trị I:** **-OH** (hiđroxit), **-NO₃** (nitrat), **-Cl** (clorua).
+- **Nhóm Hóa trị II:** **=SO₄** (sunfat), **=CO₃** (cacbonat), **=SO₃** (sunfit).
+- **Nhóm Hóa trị III:** **≡PO₄** (photphat).
+*(Mẹo nhớ: "Nhóm Một có OH, NO₃; Nhóm Hai SO₄, CO₃ rõ ràng; Nhóm Ba duy nhất PO₄ nàng").*
+
+### 4. Quy tắc hóa trị & Cách lập CTHH trong 5 giây
+Trong hợp chất hai nguyên tố hoặc nguyên tố với nhóm nguyên tử: **AₓBᵧ** (với a là hóa trị của A, b là hóa trị của B):
+$$\\text{Quy tắc:} \\quad x \\times a = y \\times b \\implies \\frac{x}{y} = \\frac{b}{a}$$
+*(Em chỉ cần nghịch đảo tỉ số hóa trị rồi rút gọn về phân số tối giản là ra ngay chỉ số x, y!)*
+
+*Ví dụ mẫu:* Lập CTHH tạo bởi Nhôm (Al hóa trị III) và Oxygen (O hóa trị II):
+- Ta có tỉ lệ: $x/y = II/III = 2/3$.
+- Vậy $x = 2$, $y = 3$ ──> Công thức hóa học là **Al₂O₃**.
+
+### 5. Thử thách thực hành nhỏ cho em
+Vận dụng các bí kíp trên, em hãy lập nhanh CTHH của:
+1. Sắt (III) kết hợp với nhóm Sunfat (SO₄ hóa trị II).
+2. Canxi (II) kết hợp với nhóm Photphat (PO₄ hóa trị III).
+Hãy nhắn cho cô công thức em tìm được để cô kiểm tra xem em đã thành thạo chưa nhé!`);
   }
 
   // Learning method & motivation advice

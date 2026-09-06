@@ -50,6 +50,75 @@ Nếu một nguyên tố ở một vế có số nguyên tử là **số lẻ**,
 Em hãy thử áp dụng ngay với phản ứng: \`Fe + O₂ ──(t°)──> Fe₃O₄\` và cho cô biết hệ số của Fe và O₂ là bao nhiêu nhé!`);
   }
 
+  if (
+    q.includes("hóa trị") ||
+    q.includes("hoa tri") ||
+    q.includes("nhớ hóa trị") ||
+    q.includes("nho hoa tri") ||
+    q.includes("bài ca hóa trị") ||
+    q.includes("bai ca hoa tri") ||
+    q.includes("bài thơ hóa trị") ||
+    q.includes("bai tho hoa tri") ||
+    q.includes("bảng hóa trị") ||
+    q.includes("bang hoa tri")
+  ) {
+    return normalizeChemistryText(`Chào các em học sinh thân yêu của cô tại trường THCS Lý Tự Trọng!
+
+Cô rất vui khi nhận được câu hỏi này. Hóa trị là "chìa khóa vàng" đầu tiên để các em mở cánh cửa vào thế giới Hóa học lớp 8 và 9 (SGK Kết nối tri thức). Đừng quá lo lắng, cô sẽ bật mí cho các em những "bí kíp" giúp ghi nhớ hóa trị một cách nhẹ nhàng và hiệu quả nhất nhé:
+
+### 1. Học qua bài thơ hóa trị (Cách truyền thống nhưng cực kỳ hiệu quả)
+Bài thơ hóa trị là "người bạn thân" của bao thế hệ học sinh. Nhịp điệu vần vè của bài thơ sẽ giúp các em nhớ hóa trị của các nguyên tố thường gặp một cách vô thức:
+
+*Đoạn thơ hóa trị kinh điển dễ thuộc nhất:*
+\`\`\`text
+Kali (K), Natri (Na), Hydro (H), Bạc (Ag) cùng với Clo (Cl),
+Một loài HÓA TRỊ I chẳng sai chút nào.
+Magie (Mg), Kẽm (Zn) với Thủy ngân (Hg),
+Oxy (O), Đồng (Cu), Thiếc (Sn) thêm phần Bari (Ba),
+Cuối cùng thêm chú Canxi (Ca),
+HÓA TRỊ II đó nhớ ghi cho tường!
+Nhôm (Al) HÓA TRỊ III chớ quên,
+Carbon (C), Silic (Si) tính bền IV thôi.
+\`\`\`
+
+### 2. Gom nhóm các nguyên tố theo hóa trị (Phương pháp tư duy logic)
+Thay vì học thuộc lòng từng nguyên tố rời rạc, các em hãy gom chúng theo các nhóm hóa trị cố định:
+- **Nhóm Hóa trị I:** H, Li, Na, K, Ag, Cl (trong muối clorua), F.
+  *(Mẹo nhớ câu vui: "Học Lớp Nào Không Ai Cho Phép" ── H, Li, Na, K, Ag, Cl, F).*
+- **Nhóm Hóa trị II:** O, Mg, Ca, Ba, Zn, Cu, Pb (chì).
+  *(Mẹo nhớ câu vui: "Bé Mang Cây Súng Bắn Phá Cuộc Xâm Lược" ── Be, Mg, Ca, Sr, Ba, Pb, Cu, Zn).*
+- **Nhóm Hóa trị III:** Al (Nhôm), Fe (Sắt khi mang hóa trị III).
+  *(Mẹo nhớ: "Anh Sắt Ba" ── Al, Fe III).*
+- **Nhóm nhiều hóa trị (Cần lưu ý đặc biệt):**
+  + **Sắt (Fe):** Thường có hóa trị **II** (FeCl₂, FeO) và hóa trị **III** (FeCl₃, Fe₂O₃).
+  + **Đồng (Cu):** Thường gặp hóa trị **II** (CuSO₄, CuO).
+  + **Carbon (C):** Hóa trị **II** (CO) và **IV** (CO₂).
+  + **Lưu huỳnh (S):** Hóa trị **II** (H₂S), **IV** (SO₂) và **VI** (SO₃, H₂SO₄).
+  + **Nitơ (N):** Hóa trị I, II, III, IV, V (thường gặp II, IV trong khí NO, NO₂).
+
+### 3. Hóa trị của các nhóm nguyên tử (Bắt buộc phải thuộc để viết CTHH)
+Khi viết công thức axit, bazơ và muối, các em xem cả nhóm nguyên tử như một "nguyên tố lớn":
+- **Nhóm Hóa trị I:** **-OH** (hiđroxit), **-NO₃** (nitrat), **-Cl** (clorua).
+- **Nhóm Hóa trị II:** **=SO₄** (sunfat), **=CO₃** (cacbonat), **=SO₃** (sunfit).
+- **Nhóm Hóa trị III:** **≡PO₄** (photphat).
+*(Mẹo nhớ: "Nhóm Một có OH, NO₃; Nhóm Hai SO₄, CO₃ rõ ràng; Nhóm Ba duy nhất PO₄ nàng").*
+
+### 4. Quy tắc hóa trị & Cách lập CTHH trong 5 giây
+Trong hợp chất hai nguyên tố hoặc nguyên tố với nhóm nguyên tử: **AₓBᵧ** (với a là hóa trị của A, b là hóa trị của B):
+$$\\text{Quy tắc:} \\quad x \\times a = y \\times b \\implies \\frac{x}{y} = \\frac{b}{a}$$
+*(Em chỉ cần nghịch đảo tỉ số hóa trị rồi rút gọn về phân số tối giản là ra ngay chỉ số x, y!)*
+
+*Ví dụ mẫu:* Lập CTHH tạo bởi Nhôm (Al hóa trị III) và Oxygen (O hóa trị II):
+- Ta có tỉ lệ: $x/y = II/III = 2/3$.
+- Vậy $x = 2$, $y = 3$ ──> Công thức hóa học là **Al₂O₃**.
+
+### 5. Thử thách thực hành nhỏ cho em
+Vận dụng các bí kíp trên, em hãy lập nhanh CTHH của:
+1. Sắt (III) kết hợp với nhóm Sunfat (SO₄ hóa trị II).
+2. Canxi (II) kết hợp với nhóm Photphat (PO₄ hóa trị III).
+Hãy nhắn cho cô công thức em tìm được để cô kiểm tra xem em đã thành thạo chưa nhé!`);
+  }
+
   if (q.includes("học giỏi") || q.includes("bí quyết") || q.includes("phương pháp học") || q.includes("yêu thích")) {
     return normalizeChemistryText(`Chào em! Cô rất vui khi biết em có tinh thần học hỏi và muốn chinh phục môn Hoá học. Hoá học là một môn học vô cùng kỳ diệu vì nó giải thích mọi điều diễn ra quanh ta.
 

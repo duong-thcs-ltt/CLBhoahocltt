@@ -1,9 +1,7 @@
-import type { Request, Response } from "express";
-import app from "../server";
-
-export default function handler(req: Request, res: Response) {
-  if (req.url && !req.url.startsWith("/api")) {
-    req.url = "/api" + (req.url.startsWith("/") ? req.url : "/" + req.url);
-  }
-  return app(req, res);
+export default function handler(req: any, res: any) {
+  res.setHeader("Content-Type", "application/json");
+  return res.status(200).json({
+    status: "ok",
+    message: "CLB Hoá học THCS Lý Tự Trọng API",
+  });
 }

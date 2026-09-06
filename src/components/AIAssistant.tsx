@@ -64,6 +64,12 @@ Em đang thắc mắc điều gì, hãy gõ ngay cho cô nhé!`,
 
   const quickPrompts: { label: string; query: string; mode: "ask" | "suggest" | "khkt"; grade: string }[] = [
     {
+      label: "Làm sao dễ nhớ hóa trị nhất?",
+      query: "Làm sao dễ nhớ hóa trị nhất",
+      mode: "ask",
+      grade: "8",
+    },
+    {
       label: "Cách sản xuất muối như thế nào?",
       query: "Cách người ta sản xuất muối như thế nào",
       mode: "ask",
