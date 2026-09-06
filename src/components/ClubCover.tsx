@@ -287,45 +287,6 @@ export const ClubCover: React.FC<ClubCoverProps> = ({ setActiveTab, onAskAI }) =
                 </span>
               </div>
             </div>
-
-            {/* Quick CTAs */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
-              <button
-                id="btn-cover-goto-guide"
-                onClick={() => setActiveTab("guide")}
-                className="px-5 py-3 rounded-xl bg-linear-to-r from-amber-400 via-yellow-300 to-amber-400 text-emerald-950 font-extrabold text-sm shadow-lg shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer border border-amber-200"
-              >
-                <BookOpen className="w-4 h-4 text-emerald-950" />
-                <span>Cẩm Nang Vận Hành</span>
-              </button>
-
-              <button
-                id="btn-cover-goto-roadmap"
-                onClick={() => setActiveTab("roadmap")}
-                className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm backdrop-blur border border-white/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
-              >
-                <span>Lộ Trình 9 Tháng</span>
-                <ArrowRight className="w-4 h-4 text-amber-300" />
-              </button>
-
-              <button
-                id="btn-cover-goto-lab"
-                onClick={() => setActiveTab("virtual_lab")}
-                className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md hover:shadow-emerald-500/30 active:scale-95 transition-all flex items-center gap-2 cursor-pointer border border-emerald-400/40"
-              >
-                <FlaskConical className="w-4 h-4 text-amber-300" />
-                <span>Vào Phòng Lab Ảo</span>
-              </button>
-
-              <button
-                id="btn-cover-goto-teacher"
-                onClick={() => setActiveTab("teacher")}
-                className="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm backdrop-blur transition-all flex items-center gap-2 cursor-pointer border border-white/15"
-              >
-                <GraduationCap className="w-4 h-4 text-cyan-300" />
-                <span>Cô Thuỳ Dương</span>
-              </button>
-            </div>
           </div>
 
           {/* Right Column: Visual Composite - Students in Red Scarves Doing Chemistry Experiments */}
