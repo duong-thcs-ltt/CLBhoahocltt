@@ -10,6 +10,7 @@ import { KHKTMentor } from "./components/KHKTMentor";
 import { ChemistryArena } from "./components/ChemistryArena";
 import { FestivalBooth } from "./components/FestivalBooth";
 import { TeacherBrandSection } from "./components/TeacherBrandSection";
+import { ClubAdminGuide } from "./components/ClubAdminGuide";
 import { TeacherAvatarProvider } from "./context/TeacherAvatarContext";
 
 export default function App() {
@@ -115,6 +116,10 @@ export default function App() {
         {activeTab === "fair" && (
           <FestivalBooth />
         )}
+
+        {activeTab === "guide" && (
+          <ClubAdminGuide setActiveTab={setActiveTab} />
+        )}
       </main>
 
       {/* Official Institutional Footer */}
@@ -136,6 +141,12 @@ export default function App() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
+            <button
+              onClick={() => setActiveTab("guide")}
+              className="text-emerald-900 font-bold bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-300 hover:bg-emerald-100 transition-colors"
+            >
+              📖 Cẩm nang vận hành
+            </button>
             <button
               onClick={() => setActiveTab("teacher")}
               className="text-amber-800 font-bold bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 hover:bg-amber-100 transition-colors"

@@ -10,7 +10,8 @@ import {
   Lightbulb, 
   Trophy,
   GraduationCap,
-  Flame
+  Flame,
+  BookOpen
 } from "lucide-react";
 import { TeacherAvatar } from "./TeacherAvatar";
 
@@ -24,7 +25,8 @@ export type NavTab =
   | "quiz" 
   | "khkt" 
   | "fair"
-  | "plan";
+  | "plan"
+  | "guide";
 
 interface NavbarProps {
   activeTab: NavTab;
@@ -35,6 +37,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   const navItems: { id: NavTab; label: string; icon: React.FC<{ className?: string }>; badge?: string }[] = [
     { id: "cover", label: "CLB Hoá Học", icon: Flame, badge: "Đam Mê" },
+    { id: "guide", label: "Cẩm Nang Vận Hành", icon: BookOpen, badge: "Chi Tiết" },
     { id: "roadmap", label: "Lộ Trình 9 Tháng", icon: CalendarDays, badge: "9 Tháng" },
     { id: "virtual_lab", label: "Phòng Thực Hành Ảo", icon: FlaskConical, badge: "5 Mô Phỏng" },
     { id: "ai_assistant", label: "Trợ Lý AI Cô Dương", icon: Sparkles, badge: "Gemini" },
@@ -106,6 +109,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
           {/* Quick Actions */}
           <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => setActiveTab("guide")}
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300 hover:bg-emerald-100 transition-colors shadow-2xs cursor-pointer"
+              title="Cẩm nang hướng dẫn sử dụng và vận hành CLB chi tiết từng bước cho Quản trị viên"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-emerald-700" />
+              <span className="hidden sm:inline">Cẩm Nang Vận Hành</span>
+            </button>
+
             <button
               onClick={() => setActiveTab("teacher")}
               className="inline-flex items-center gap-1.5 text-xs font-bold pl-1.5 pr-3 py-1 rounded-xl bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 transition-colors shadow-2xs cursor-pointer"

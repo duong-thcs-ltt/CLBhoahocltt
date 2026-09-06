@@ -291,12 +291,21 @@ export const ClubCover: React.FC<ClubCoverProps> = ({ setActiveTab, onAskAI }) =
             {/* Quick CTAs */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
               <button
+                id="btn-cover-goto-guide"
+                onClick={() => setActiveTab("guide")}
+                className="px-5 py-3 rounded-xl bg-linear-to-r from-amber-400 via-yellow-300 to-amber-400 text-emerald-950 font-extrabold text-sm shadow-lg shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer border border-amber-200"
+              >
+                <BookOpen className="w-4 h-4 text-emerald-950" />
+                <span>Cẩm Nang Vận Hành</span>
+              </button>
+
+              <button
                 id="btn-cover-goto-roadmap"
                 onClick={() => setActiveTab("roadmap")}
-                className="px-5 py-3 rounded-xl bg-linear-to-r from-amber-400 via-amber-300 to-yellow-400 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+                className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm backdrop-blur border border-white/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
               >
-                <span>Khám Phá Lộ Trình 9 Tháng</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>Lộ Trình 9 Tháng</span>
+                <ArrowRight className="w-4 h-4 text-amber-300" />
               </button>
 
               <button
